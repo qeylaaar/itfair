@@ -242,19 +242,19 @@ const Topbar = ({ setSidebarOpen }: { setSidebarOpen: (open: boolean) => void })
                             className="absolute right-0 mt-3 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-2"
                             onMouseLeave={() => setProfileOpen(false)} // Menutup saat mouse keluar
                         >
-                            <a href="#profile" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <NavLink to="#profile" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 <User className="w-4 h-4 mr-3" />
                                 My Profile
-                            </a>
-                            <a href="#settings" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            </NavLink>
+                            <NavLink to="#settings" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 <Settings className="w-4 h-4 mr-3" />
                                 Settings
-                            </a>
+                            </NavLink>
                             <hr className="my-1 border-gray-100" />
-                            <a href="/login" className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                            <NavLink to="/login" className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
                                 <LogOut className="w-4 h-4 mr-3" />
                                 Sign Out
-                            </a>
+                            </NavLink>
                         </div>
                     )}
                 </div>

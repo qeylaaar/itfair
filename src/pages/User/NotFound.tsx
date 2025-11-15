@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 // Reusable SVG for the search/magnifying glass icon
 const SearchIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
@@ -32,12 +33,12 @@ const NotFound: React.FC = () => {
                     <div className="p-6 pt-0">
                         {/* Action Button - changed to green */}
                         <div className="mt-2 flex items-center justify-center">
-                            <a
+                            <NavLink
                                 className="font-semibold transition duration-300 inline-flex items-center justify-center rounded-lg text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 bg-green-500 text-white h-10 px-6 py-2 hover:bg-green-600"
-                                href="/"
+                                to="/"
                             >
                                 Kembali ke Halaman Utama
-                            </a>
+                            </NavLink>
                         </div>
                     </div>
                 </div>

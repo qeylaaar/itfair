@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
+import { NavLink } from 'react-router-dom';
 
 // Reusable SVG for the checkmark icon in the input field
 const CheckCircleIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
@@ -138,12 +139,12 @@ const App: React.FC = () => {
 
                             {/* Action Buttons */}
                             <div className="mt-6 flex items-center justify-end gap-x-3">
-                                <a
+                                <NavLink
                                     className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-gray-100 text-gray-700 border border-gray-300 h-10 px-4 py-2 duration-200"
-                                    href="/register"
+                                    to="/register"
                                 >
                                     Daftar
-                                </a>
+                                </NavLink>
                                 <button
                                     className="font-semibold transition duration-300 inline-flex items-center justify-center rounded-lg text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 bg-green-500 text-white h-10 px-4 py-2 hover:bg-green-600 disabled:bg-gray-200 disabled:text-gray-500"
                                     type="submit"

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Logo from "../assets/images/logo.png";
+import { NavLink } from 'react-router-dom';
 
 
 const Footer: React.FC = () => {
@@ -33,13 +34,13 @@ const Footer: React.FC = () => {
             {/* Company Info */}
             <div className="lg:col-span-6 xl:col-span-6">
               <div>
-                <a href="index.html" className="block mb-6">
+                <NavLink to="index.html" className="block mb-6">
                   <img 
                     src={Logo}
                     alt="Padi Predict Logo" 
                     className="h-10 w-auto"
                   />
-                </a>
+                </NavLink>
                 <p className="block text-sm text-gray-600 mb-9">
                   Prediksi panen padi lebih akurat dengan teknologi AI. <br /> Maksimalkan hasil panen dan optimalkan pengelolaan lahan sawah Anda.
                 </p>
@@ -121,20 +122,20 @@ const Footer: React.FC = () => {
                 <div>
                   <span className="block mb-6 text-sm text-gray-500">Features</span>
                   <nav className="flex flex-col space-y-3">
-                    <a href="#" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Prediction</a>
-                    {/* <a href="#" className="text-sm font-normal text-gray-600 transition hover:text-green-600">HTML website hosting</a>
-                    <a href="#" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Free Image Hosting</a>
-                    <a href="#" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Upload PDF Online</a>
-                    <a href="#" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Free Zip file hosting</a> */}
+                    <NavLink to="#" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Prediction</NavLink>
+                    {/* <NavLink to="#" className="text-sm font-normal text-gray-600 transition hover:text-green-600">HTML website hosting</NavLink>
+                    <NavLink to="#" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Free Image Hosting</NavLink>
+                    <NavLink to="#" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Upload PDF Online</NavLink>
+                    <NavLink to="#" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Free Zip file hosting</NavLink> */}
                   </nav>
                 </div>
                 
                 <div>
                   <span className="block mb-6 text-sm text-gray-500">Account</span>
                   <nav className="flex flex-col space-y-3">
-                    <a href="/login" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Login</a>
-                    <a href="/register" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Sign Up</a>
-                    <a href="contact.html" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Support</a>
+                    <NavLink to="/login" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Login</NavLink>
+                    <NavLink to="/register" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Sign Up</NavLink>
+                    <NavLink to="contact.html" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Support</NavLink>
                   </nav>
                 </div>
               </div>
@@ -148,7 +149,7 @@ const Footer: React.FC = () => {
         <div className="container relative z-10 px-5 mx-auto sm:px-7">
           <div className="py-5 text-center">
             <p className="text-sm text-gray-500">
-              © {currentYear}&nbsp;Padi Predict - Hak Cipta Dilindungi.
+              © {currentYear}&nbsp;Freestyle - Hak Cipta Dilindungi.
             </p>
           </div>
         </div>

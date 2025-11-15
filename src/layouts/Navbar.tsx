@@ -72,7 +72,7 @@ const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
 
             {/* Pages Dropdown */}
             <div className="relative">
-              <button 
+              {/* <button 
                 onClick={() => toggleDropdown('pages')}
                 className={`group text-sm inline-flex items-center px-4 py-6 font-medium rounded-full ${
                   isPagesActive 
@@ -84,7 +84,7 @@ const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
                 <svg className={`ml-1 h-4 w-4 transition-transform duration-200 ${activeDropdown === 'pages' ? 'rotate-180' : ''}`} xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
                   <path d="M4.33301 5.91666L8.49967 10.0833L12.6663 5.91666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-              </button>
+              </button> */}
 
               <div className={`absolute left-0 w-[266px] bg-white rounded-2xl shadow-lg border border-gray-100 p-3 z-50 ${activeDropdown === 'pages' ? 'block' : 'hidden'}`}>
                 <div className="space-y-1">
@@ -196,7 +196,7 @@ const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
 
             {/* Pages Dropdown (Mobile) */}
             <div>
-              <button 
+              {/* <button 
                 onClick={() => toggleDropdown('pages-mobile')}
                 className={`flex justify-between items-center w-full px-3 py-2 rounded-md text-sm font-medium ${
                   isPagesActive 
@@ -205,8 +205,7 @@ const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
                 }`}
               >
                 <span>Pages</span>
-                {/* ... icon ... */}
-              </button>
+              </button> */}
 
               {activeDropdown === 'pages-mobile' && (
                 <div className="mt-2 space-y-1 pl-4">
