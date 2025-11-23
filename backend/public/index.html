@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Early Crop Failure Warning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <header class="border-b bg-white/70 backdrop-blur sticky top-0 z-10">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+            <h1 class="text-xl md:text-2xl font-semibold">Sistem Peringatan Dini Gagal Panen</h1>
+            <span class="text-sm text-slate-500">Beta</span>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        <section class="bg-white border rounded-xl p-4 md:p-6 shadow-sm">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <h2 class="text-lg font-medium">Prediksi Risiko Wilayah</h2>
+                    <p class="text-sm text-slate-600">Pantau risiko gagal panen dua minggu ke depan.</p>
+                </div>
+                <div class="flex gap-2 items-center">
+                    <span class="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">Low</span>
+                    <span class="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-700">Medium</span>
+                    <span class="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-rose-100 text-rose-700">High</span>
+                </div>
+            </div>
+
+            <div class="mt-4 flex flex-col md:flex-row gap-3">
+                <input id="regionInput" type="text" placeholder="Filter wilayah (opsional)" class="w-full md:w-64 px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-slate-200" />
+                <button id="refreshBtn" class="px-4 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800">Muat Ulang</button>
+            </div>
+
+            <div id="status" class="mt-4 text-sm text-slate-600">Memuat data...</div>
+
+            <ul id="predictionsList" class="mt-4 divide-y border rounded-xl bg-slate-25"></ul>
+        </section>
+
+        <section class="text-xs text-slate-500">
+            Data prediksi disediakan tanpa jaminan. Selalu validasi dengan kondisi lokal dan rekomendasi dinas setempat.
+        </section>
+    </main>
+
+    <script>
+    const listEl = document.getElementById('predictionsList');
+    const statusEl = document.getElementById('status');
+    const btn = document.getElementById('refreshBtn');
+    const input = document.getElementById('regionInput');
+
+    function badge(level) {
+        const map = {
+            low: 'bg-emerald-100 text-emerald-700',
+            medium: 'bg-amber-100 text-amber-700',
+            high: 'bg-rose-100 text-rose-700'
+        };
+        const cls = map[level] || 'bg-slate-100 text-slate-700';
+        return `<span class="inline-block text-xs px-2 py-1 rounded-full ${cls}">${level || 'unknown'}</span>`;
+    }
+
+    function itemTpl(p) {
+        const date = p.prediction_for_date || '-';
+        const prob = typeof p.failure_probability === 'number' ? Math.round(p.failure_probability * 100) + '%' : '-';
+        const sim = typeof p.similarity_pct === 'number' ? Math.round(p.similarity_pct) + '%' : '-';
+        const msg = p.message || '';
+        return `
+        <li class="p-4 flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+            <div class="md:w-1/3">
+                <div class="font-medium">${p.region || '-'}</div>
+                <div class="text-xs text-slate-500">Untuk tanggal: ${date}</div>
+            </div>
+            <div class="flex items-center gap-2">
+                ${badge(p.risk_level)}
+                <span class="text-sm text-slate-700">Prob: ${prob}</span>
+                <span class="text-xs text-slate-500">Similarity: ${sim}</span>
+            </div>
+            <div class="text-sm text-slate-700 md:ml-auto">${msg}</div>
+        </li>`;
+    }
+
+    async function loadPredictions() {
+        try {
+            statusEl.textContent = 'Memuat data...';
+            listEl.innerHTML = '';
+            const region = input.value.trim();
+            const q = region ? `?region=${encodeURIComponent(region)}` : '';
+            const res = await fetch(`/api/predictions${q}`);
+            if (!res.ok) throw new Error('Gagal mengambil data');
+            const json = await res.json();
+            const data = Array.isArray(json.data) ? json.data : [];
+            if (!data.length) {
+                statusEl.textContent = 'Tidak ada data prediksi.';
+                return;
+            }
+            statusEl.textContent = `${data.length} prediksi ditemukan.`;
+            listEl.innerHTML = data.map(itemTpl).join('');
+        } catch (e) {
+            statusEl.textContent = 'Terjadi kesalahan memuat data.';
+        }
+    }
+
+    btn.addEventListener('click', loadPredictions);
+    window.addEventListener('DOMContentLoaded', loadPredictions);
+    </script>
+</body>
+</html>
