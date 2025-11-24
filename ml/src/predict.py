@@ -23,7 +23,7 @@ def load_model_and_artifacts():
     
     return model, scaler, model_config
 
-def predict_harvest_failure(region_name: str, start_date: str = None, use_csv: bool = True):
+def predict_harvest_failure(region_name: str, start_date: str = None, use_csv: bool = True, planting_month: int = None):
     """
     Memprediksi kemungkinan gagal panen untuk suatu wilayah.
     
@@ -31,6 +31,7 @@ def predict_harvest_failure(region_name: str, start_date: str = None, use_csv: b
         region_name: Nama kabupaten/kota
         start_date: Tanggal mulai untuk data cuaca (format: 'YYYY-MM-DD')
         use_csv: Jika True, gunakan data CSV lokal. Jika False, gunakan Supabase API
+        planting_month: Bulan penanaman (1-12). Jika diberikan, akan memprediksi 3 bulan ke depan dari bulan penanaman
     
     Returns:
         dict: Hasil prediksi dengan probabilitas dan klasifikasi
@@ -39,7 +40,46 @@ def predict_harvest_failure(region_name: str, start_date: str = None, use_csv: b
     model, scaler, model_config = load_model_and_artifacts()
     threshold = model_config.get('optimal_threshold', 0.5)
     
-    print(f"Memprediksi untuk wilayah: {region_name}")
+    # Hitung batas tahun untuk data historis (10 tahun terakhir)
+    from datetime import datetime
+    current_year = datetime.now().year
+    min_year = current_year - config.HISTORICAL_YEARS_FOR_PREDICTION
+    print(f"Menggunakan data historis dari {min_year} hingga {current_year} ({config.HISTORICAL_YEARS_FOR_PREDICTION} tahun terakhir)")
+    
+    # Jika planting_month diberikan, hitung periode prediksi 3 bulan ke depan
+    prediction_period = None
+    if planting_month is not None:
+        from datetime import datetime, timedelta
+        current_year = datetime.now().year
+        current_month = datetime.now().month
+        
+        # Jika bulan penanaman sudah lewat tahun ini, gunakan tahun depan
+        if planting_month < current_month:
+            planting_year = current_year + 1
+        else:
+            planting_year = current_year
+        
+        # Tanggal mulai penanaman
+        planting_start = datetime(planting_year, planting_month, 1)
+        # Tanggal akhir (3 bulan setelah penanaman)
+        planting_end = planting_start + timedelta(days=90)  # ~3 bulan
+        
+        # Untuk training data, ambil data historis dari bulan yang sama di tahun-tahun sebelumnya
+        # Misalnya jika penanaman di bulan 10, ambil data Oktober dari tahun-tahun sebelumnya
+        prediction_period = {
+            'planting_month': planting_month,
+            'planting_year': planting_year,
+            'planting_start': planting_start,
+            'planting_end': planting_end,
+            'start_date': planting_start.strftime('%Y-%m-%d'),
+            'end_date': planting_end.strftime('%Y-%m-%d')
+        }
+        
+        print(f"Memprediksi untuk wilayah: {region_name}")
+        print(f"Bulan penanaman: {planting_month} ({planting_start.strftime('%B %Y')})")
+        print(f"Periode prediksi: {prediction_period['start_date']} hingga {prediction_period['end_date']}")
+    else:
+        print(f"Memprediksi untuk wilayah: {region_name}")
     
     # Muat data prediksi
     if use_csv:
@@ -85,15 +125,49 @@ def predict_harvest_failure(region_name: str, start_date: str = None, use_csv: b
         # Jika masih tidak ada, coba reverse - apakah region_name mengandung normalized cuaca region
         if not weather_mask.any():
             # Cek apakah ada normalized cuaca region yang ada di region_name
+            reverse_mask = pd.Series([False] * len(df_weather_normalized), index=df_weather_normalized.index)
             for idx, norm_cuaca in enumerate(df_weather_normalized['_normalized_region']):
                 if region_normalized and norm_cuaca and (region_normalized in norm_cuaca or norm_cuaca in region_normalized):
-                    weather_mask.iloc[idx] = True
+                    reverse_mask.iloc[idx] = True
+            if reverse_mask.any():
+                weather_mask = reverse_mask
         
         # Konversi kolom tanggal dan ambil semua cuaca untuk wilayah tsb sebagai basis
         df_weather[config.DATE_COLUMN] = pd.to_datetime(df_weather[config.DATE_COLUMN])
         base_weather = df_weather[weather_mask]
+        
+        # Filter data cuaca hanya dari 10 tahun terakhir
+        base_weather = base_weather.copy()  # Buat copy untuk menghindari warning
+        base_weather['Tahun'] = base_weather[config.DATE_COLUMN].dt.year
+        base_weather = base_weather[base_weather['Tahun'] >= min_year].copy()
+        base_weather = base_weather.drop(columns=['Tahun'])
+        print(f"Data cuaca setelah filter 10 tahun terakhir: {len(base_weather)} baris")
 
-        if start_date and not base_weather.empty:
+        if prediction_period:
+            # Jika ada bulan penanaman, ambil data historis dari bulan yang sama di tahun-tahun sebelumnya
+            # untuk periode 3 bulan (bulan penanaman + 2 bulan berikutnya)
+            planting_month = prediction_period['planting_month']
+            
+            # Ambil data dari bulan penanaman dan 2 bulan berikutnya untuk semua tahun
+            # Misalnya jika penanaman di bulan 10, ambil data Oktober, November, Desember dari semua tahun
+            month_range = []
+            for i in range(3):  # 3 bulan ke depan
+                month_num = ((planting_month - 1 + i) % 12) + 1
+                month_range.append(month_num)
+            
+            print(f"Mengambil data historis untuk bulan: {month_range}")
+            
+            # Filter data cuaca berdasarkan bulan (dari semua tahun)
+            base_weather['Bulan'] = base_weather[config.DATE_COLUMN].dt.month
+            df_weather = base_weather[base_weather['Bulan'].isin(month_range)].copy()
+            df_weather = df_weather.drop(columns=['Bulan'])
+            
+            # Urutkan berdasarkan tanggal untuk konsistensi
+            df_weather = df_weather.sort_values(by=config.DATE_COLUMN).reset_index(drop=True)
+            
+            print(f"Data cuaca historis untuk periode penanaman: {len(df_weather)} baris")
+            
+        elif start_date and not base_weather.empty:
             # Filter berdasarkan tanggal mulai
             filtered_weather = base_weather[base_weather[config.DATE_COLUMN] >= start_date]
             # Jika setelah filter tanggal data kosong, fallback ke seluruh histori wilayah tsb
@@ -105,21 +179,125 @@ def predict_harvest_failure(region_name: str, start_date: str = None, use_csv: b
         # Filter data panen berdasarkan nama wilayah yang sudah dinormalisasi
         harvest_mask = df_harvest_normalized['_normalized_region'] == region_normalized
         df_harvest = df_harvest[harvest_mask]
+        
+        # Filter data panen hanya dari 10 tahun terakhir
+        # Cek kolom tahun di data panen
+        if 'Tahun' in df_harvest.columns:
+            before_count = len(df_harvest)
+            df_harvest = df_harvest[df_harvest['Tahun'] >= min_year].copy()
+            print(f"Data panen setelah filter 10 tahun terakhir: {before_count} -> {len(df_harvest)} baris")
+        elif config.DATE_COLUMN in df_harvest.columns:
+            # Jika tidak ada kolom Tahun, coba ekstrak dari kolom tanggal
+            df_harvest[config.DATE_COLUMN] = pd.to_datetime(df_harvest[config.DATE_COLUMN], errors='coerce')
+            df_harvest['Tahun'] = df_harvest[config.DATE_COLUMN].dt.year
+            before_count = len(df_harvest)
+            df_harvest = df_harvest[df_harvest['Tahun'] >= min_year].copy()
+            df_harvest = df_harvest.drop(columns=['Tahun'])
+            print(f"Data panen setelah filter 10 tahun terakhir: {before_count} -> {len(df_harvest)} baris")
     
     else:
         # Untuk production: ambil dari Supabase
+        # Pastikan menggunakan data 10 tahun terakhir
         if not start_date:
-            # Default: 12 minggu terakhir
+            # Default: mulai dari 10 tahun yang lalu
             from datetime import datetime, timedelta
-            start_date = (datetime.now() - timedelta(weeks=12)).strftime('%Y-%m-%d')
+            start_date = datetime(min_year, 1, 1).strftime('%Y-%m-%d')
+            print(f"Menggunakan data dari Supabase mulai dari {start_date} (10 tahun terakhir)")
         
         df_harvest, df_weather = dp.load_prediction_data(region_name, start_date)
+        
+        # Filter tambahan untuk memastikan hanya data 10 tahun terakhir
+        if not df_weather.empty and config.DATE_COLUMN in df_weather.columns:
+            df_weather[config.DATE_COLUMN] = pd.to_datetime(df_weather[config.DATE_COLUMN])
+            df_weather['Tahun'] = df_weather[config.DATE_COLUMN].dt.year
+            before_count = len(df_weather)
+            df_weather = df_weather[df_weather['Tahun'] >= min_year].copy()
+            df_weather = df_weather.drop(columns=['Tahun'])
+            print(f"Data cuaca Supabase setelah filter 10 tahun: {before_count} -> {len(df_weather)} baris")
+        
+        if not df_harvest.empty:
+            if 'Tahun' in df_harvest.columns:
+                before_count = len(df_harvest)
+                df_harvest = df_harvest[df_harvest['Tahun'] >= min_year].copy()
+                print(f"Data panen Supabase setelah filter 10 tahun: {before_count} -> {len(df_harvest)} baris")
+            elif config.DATE_COLUMN in df_harvest.columns:
+                df_harvest[config.DATE_COLUMN] = pd.to_datetime(df_harvest[config.DATE_COLUMN], errors='coerce')
+                df_harvest['Tahun'] = df_harvest[config.DATE_COLUMN].dt.year
+                before_count = len(df_harvest)
+                df_harvest = df_harvest[df_harvest['Tahun'] >= min_year].copy()
+                df_harvest = df_harvest.drop(columns=['Tahun'])
+                print(f"Data panen Supabase setelah filter 10 tahun: {before_count} -> {len(df_harvest)} baris")
     
     if df_harvest.empty or df_weather.empty:
         return {
             'error': f'Data tidak ditemukan untuk wilayah {region_name}. Panen: {len(df_harvest)} baris, Cuaca: {len(df_weather)} baris',
             'region': region_name
         }
+    
+    # Filter ulang data cuaca untuk memastikan hanya 10 tahun terakhir
+    if config.DATE_COLUMN in df_weather.columns:
+        df_weather[config.DATE_COLUMN] = pd.to_datetime(df_weather[config.DATE_COLUMN], errors='coerce')
+        df_weather['Tahun'] = df_weather[config.DATE_COLUMN].dt.year
+        before_count = len(df_weather)
+        df_weather = df_weather[df_weather['Tahun'] >= min_year].copy()
+        df_weather = df_weather.drop(columns=['Tahun'])
+        print(f"Data cuaca final setelah filter 10 tahun terakhir: {before_count} -> {len(df_weather)} baris")
+    
+    # Filter ulang data panen untuk memastikan hanya 10 tahun terakhir
+    if 'Tahun' in df_harvest.columns:
+        before_count = len(df_harvest)
+        df_harvest = df_harvest[df_harvest['Tahun'] >= min_year].copy()
+        print(f"Data panen final setelah filter 10 tahun terakhir: {before_count} -> {len(df_harvest)} baris")
+    elif config.DATE_COLUMN in df_harvest.columns:
+        df_harvest[config.DATE_COLUMN] = pd.to_datetime(df_harvest[config.DATE_COLUMN], errors='coerce')
+        df_harvest['Tahun'] = df_harvest[config.DATE_COLUMN].dt.year
+        before_count = len(df_harvest)
+        df_harvest = df_harvest[df_harvest['Tahun'] >= min_year].copy()
+        df_harvest = df_harvest.drop(columns=['Tahun'])
+        print(f"Data panen final setelah filter 10 tahun terakhir: {before_count} -> {len(df_harvest)} baris")
+    
+    # Pastikan data hanya untuk wilayah yang diminta (double check setelah filter awal)
+    # Normalisasi nama untuk matching
+    def normalize_region_name_check(name):
+        if pd.isna(name):
+            return ""
+        name = str(name).strip()
+        prefixes = ["Kab. ", "Kabupaten ", "Kota ", "Kotamadya "]
+        for prefix in prefixes:
+            if name.startswith(prefix):
+                name = name[len(prefix):].strip()
+        prefixes_no_space = ["Kab.", "Kabupaten", "Kota", "Kotamadya"]
+        for prefix in prefixes_no_space:
+            if name.startswith(prefix) and len(name) > len(prefix):
+                name = name[len(prefix):].strip()
+        return name
+    
+    region_normalized_check = normalize_region_name_check(region_name)
+    
+    # Filter ulang untuk memastikan hanya data wilayah yang diminta
+    if config.REGION_COLUMN in df_harvest.columns:
+        df_harvest['_normalized_check'] = df_harvest[config.REGION_COLUMN].apply(normalize_region_name_check)
+        before_count = len(df_harvest)
+        df_harvest = df_harvest[df_harvest['_normalized_check'] == region_normalized_check].drop(columns=['_normalized_check'])
+        print(f"Filter panen: {before_count} -> {len(df_harvest)} baris untuk {region_name}")
+    
+    if config.REGION_COLUMN in df_weather.columns:
+        df_weather['_normalized_check'] = df_weather[config.REGION_COLUMN].apply(normalize_region_name_check)
+        before_count = len(df_weather)
+        df_weather = df_weather[df_weather['_normalized_check'] == region_normalized_check].drop(columns=['_normalized_check'])
+        print(f"Filter cuaca: {before_count} -> {len(df_weather)} baris untuk {region_name}")
+    
+    # Pastikan data diurutkan berdasarkan tanggal untuk sequence yang konsisten
+    if config.DATE_COLUMN in df_weather.columns:
+        df_weather = df_weather.sort_values(by=config.DATE_COLUMN).reset_index(drop=True)
+    
+    # Debug: cek unique wilayah yang masih ada
+    if config.REGION_COLUMN in df_harvest.columns:
+        unique_regions_harvest = df_harvest[config.REGION_COLUMN].unique()
+        print(f"Wilayah unik di data panen setelah filter: {unique_regions_harvest}")
+    if config.REGION_COLUMN in df_weather.columns:
+        unique_regions_weather = df_weather[config.REGION_COLUMN].unique()
+        print(f"Wilayah unik di data cuaca setelah filter: {unique_regions_weather}")
     
     # Preprocess data
     print("Memproses data...")
@@ -145,8 +323,16 @@ def predict_harvest_failure(region_name: str, start_date: str = None, use_csv: b
     print("Menjalankan prediksi...")
     predictions = model.predict(dataset, verbose=0)
     
-    # Ambil prediksi terakhir (paling recent)
+    # Debug: print info tentang predictions
+    print(f"Jumlah sequence yang diprediksi: {len(predictions)}")
+    if len(predictions) > 0:
+        print(f"Contoh prediksi (3 pertama): {predictions[:3].flatten()}")
+        print(f"Contoh prediksi (3 terakhir): {predictions[-3:].flatten()}")
+    
+    # Ambil prediksi terakhir (paling recent) - ini adalah prediksi untuk data terbaru
+    # Jika ada multiple sequences, ambil yang terakhir karena data sudah diurutkan berdasarkan tanggal
     latest_prediction = float(predictions[-1][0])
+    print(f"Prediksi untuk {region_name}: {latest_prediction:.4f}")
     is_failure = latest_prediction >= threshold
     
     # Interpretasi
@@ -161,8 +347,17 @@ def predict_harvest_failure(region_name: str, start_date: str = None, use_csv: b
     else:
         reasons = rec.get_success_reasons(latest_prediction, df_weather, df_harvest)
     
-    mitigation = rec.get_mitigation_recommendations(latest_prediction, risk_level, df_weather)
-    weather_forecast = rec.get_weather_forecast(df_weather, months=3)
+    mitigation = rec.get_mitigation_recommendations(latest_prediction, risk_level, df_weather, region_name)
+    
+    # Jika ada bulan penanaman, buat forecast untuk 3 bulan ke depan dari bulan penanaman
+    if prediction_period:
+        weather_forecast = rec.get_weather_forecast_from_planting_month(
+            df_weather, 
+            planting_month=prediction_period['planting_month'],
+            planting_year=prediction_period['planting_year']
+        )
+    else:
+        weather_forecast = rec.get_weather_forecast(df_weather, months=3)
     
     result = {
         'region': region_name,
@@ -188,13 +383,14 @@ def predict_harvest_failure(region_name: str, start_date: str = None, use_csv: b
     
     return result
 
-def predict_batch(regions: list, use_csv: bool = True):
+def predict_batch(regions: list, use_csv: bool = True, planting_month: int = None):
     """
     Memprediksi untuk beberapa wilayah sekaligus.
     
     Args:
         regions: List nama kabupaten/kota
         use_csv: Jika True, gunakan data CSV lokal
+        planting_month: Bulan penanaman (1-12) untuk prediksi 3 bulan ke depan
     
     Returns:
         list: List hasil prediksi untuk setiap wilayah
@@ -202,7 +398,7 @@ def predict_batch(regions: list, use_csv: bool = True):
     results = []
     for region in regions:
         try:
-            result = predict_harvest_failure(region, use_csv=use_csv)
+            result = predict_harvest_failure(region, use_csv=use_csv, planting_month=planting_month)
             results.append(result)
         except Exception as e:
             results.append({
@@ -366,13 +562,15 @@ if __name__ == "__main__":
     parser.add_argument('--region', type=str, required=True, help='Nama kabupaten/kota')
     parser.add_argument('--start-date', type=str, help='Tanggal mulai (YYYY-MM-DD)')
     parser.add_argument('--csv', action='store_true', help='Gunakan data CSV lokal')
+    parser.add_argument('--planting-month', type=int, help='Bulan penanaman (1-12) untuk prediksi 3 bulan ke depan')
     
     args = parser.parse_args()
     
     result = predict_harvest_failure(
         args.region,
         start_date=args.start_date,
-        use_csv=args.csv
+        use_csv=args.csv,
+        planting_month=args.planting_month
     )
     
     print("\n" + "=" * 60)

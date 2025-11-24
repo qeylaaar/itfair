@@ -1,0 +1,897 @@
+2025-11-24 13:36:22.147840: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-11-24 13:36:25.089026: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-11-24 13:36:27.946692: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Menghitung probabilitas per wilayah...
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Bandung
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 281 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 97 baris
+Data panen setelah filter 10 tahun terakhir: 14 -> 14 baris
+Data cuaca final setelah filter 10 tahun terakhir: 97 -> 97 baris
+Data panen final setelah filter 10 tahun terakhir: 14 -> 14 baris
+Filter panen: 14 -> 14 baris untuk Bandung
+Filter cuaca: 97 -> 97 baris untuk Bandung
+Wilayah unik di data panen setelah filter: ['Bandung' 'Kota Bandung']
+Wilayah unik di data cuaca setelah filter: ['Kota Bandung' 'Kab. Bandung']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 310
+Contoh prediksi (3 pertama): [0.00012218 0.00012218 0.0001221 ]
+Contoh prediksi (3 terakhir): [0.00012226 0.00012224 0.00012225]
+Prediksi untuk Bandung: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Bandung Barat
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 71 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 28 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 28 -> 28 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Bandung Barat
+Filter cuaca: 28 -> 28 baris untuk Bandung Barat
+Wilayah unik di data panen setelah filter: ['Bandung Barat']
+Wilayah unik di data cuaca setelah filter: ['Kab. Bandung Barat']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 251
+Contoh prediksi (3 pertama): [0.00012236 0.00012232 0.00012232]
+Contoh prediksi (3 terakhir): [0.00012235 0.00012235 0.00012233]
+Prediksi untuk Bandung Barat: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Bekasi
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 133 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 35 baris
+Data panen setelah filter 10 tahun terakhir: 14 -> 14 baris
+Data cuaca final setelah filter 10 tahun terakhir: 35 -> 35 baris
+Data panen final setelah filter 10 tahun terakhir: 14 -> 14 baris
+Filter panen: 14 -> 14 baris untuk Bekasi
+Filter cuaca: 35 -> 35 baris untuk Bekasi
+Wilayah unik di data panen setelah filter: ['Bekasi' 'Kota Bekasi']
+Wilayah unik di data cuaca setelah filter: ['Kota Bekasi' 'Kab. Bekasi']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 305
+Contoh prediksi (3 pertama): [0.00012278 0.00012278 0.00012279]
+Contoh prediksi (3 terakhir): [0.00012249 0.00012244 0.00012243]
+Prediksi untuk Bekasi: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Bogor
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 433 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 145 baris
+Data panen setelah filter 10 tahun terakhir: 14 -> 14 baris
+Data cuaca final setelah filter 10 tahun terakhir: 145 -> 145 baris
+Data panen final setelah filter 10 tahun terakhir: 14 -> 14 baris
+Filter panen: 14 -> 14 baris untuk Bogor
+Filter cuaca: 145 -> 145 baris untuk Bogor
+Wilayah unik di data panen setelah filter: ['Bogor' 'Kota Bogor']
+Wilayah unik di data cuaca setelah filter: ['Kota Bogor' 'Kab. Bogor']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 313
+Contoh prediksi (3 pertama): [0.00012221 0.00012215 0.0001221 ]
+Contoh prediksi (3 terakhir): [0.00012169 0.00012204 0.00012212]
+Prediksi untuk Bogor: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Ciamis
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 116 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 29 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 29 -> 29 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Ciamis
+Filter cuaca: 29 -> 29 baris untuk Ciamis
+Wilayah unik di data panen setelah filter: ['Ciamis']
+Wilayah unik di data cuaca setelah filter: ['Kab. Ciamis']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 299
+Contoh prediksi (3 pertama): [0.00012222 0.0001222  0.0001222 ]
+Contoh prediksi (3 terakhir): [0.00012223 0.00012223 0.00012221]
+Prediksi untuk Ciamis: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Cianjur
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 155 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 58 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 58 -> 58 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Cianjur
+Filter cuaca: 58 -> 58 baris untuk Cianjur
+Wilayah unik di data panen setelah filter: ['Cianjur']
+Wilayah unik di data cuaca setelah filter: ['Kab. Cianjur']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 303
+Contoh prediksi (3 pertama): [0.00012328 0.00012326 0.0001233 ]
+Contoh prediksi (3 terakhir): [0.00012292 0.00012286 0.00012283]
+Prediksi untuk Cianjur: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Cirebon
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 86 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 18 baris
+Data panen setelah filter 10 tahun terakhir: 14 -> 14 baris
+Data cuaca final setelah filter 10 tahun terakhir: 18 -> 18 baris
+Data panen final setelah filter 10 tahun terakhir: 14 -> 14 baris
+Filter panen: 14 -> 14 baris untuk Cirebon
+Filter cuaca: 18 -> 18 baris untuk Cirebon
+Wilayah unik di data panen setelah filter: ['Cirebon' 'Kota Cirebon']
+Wilayah unik di data cuaca setelah filter: ['Kab. Cirebon' 'Kota Cirebon']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 198
+Contoh prediksi (3 pertama): [0.00012242 0.00012242 0.00012254]
+Contoh prediksi (3 terakhir): [0.00012249 0.0001225  0.00012248]
+Prediksi untuk Cirebon: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Garut
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 85 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 40 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 40 -> 40 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Garut
+Filter cuaca: 40 -> 40 baris untuk Garut
+Wilayah unik di data panen setelah filter: ['Garut']
+Wilayah unik di data cuaca setelah filter: ['Kab. Garut']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 311
+Contoh prediksi (3 pertama): [0.00012238 0.00012242 0.00012242]
+Contoh prediksi (3 terakhir): [0.00012229 0.00012231 0.00012229]
+Prediksi untuk Garut: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Indramayu
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 39 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 9 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 9 -> 9 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Indramayu
+Filter cuaca: 9 -> 9 baris untuk Indramayu
+Wilayah unik di data panen setelah filter: ['Indramayu']
+Wilayah unik di data cuaca setelah filter: ['Kab. Indramayu']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 144
+Contoh prediksi (3 pertama): [0.0001524  0.00015313 0.00015392]
+Contoh prediksi (3 terakhir): [0.00017698 0.00017698 0.00017632]
+Prediksi untuk Indramayu: 0.0002
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Karawang
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 47 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 12 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 12 -> 12 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Karawang
+Filter cuaca: 12 -> 12 baris untuk Karawang
+Wilayah unik di data panen setelah filter: ['Karawang']
+Wilayah unik di data cuaca setelah filter: ['Kab. Karawang']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 304
+Contoh prediksi (3 pertama): [0.00013377 0.00013335 0.000133  ]
+Contoh prediksi (3 terakhir): [0.00013163 0.00013115 0.00013144]
+Prediksi untuk Karawang: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Kota Bandung
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 179 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 63 baris
+Data panen setelah filter 10 tahun terakhir: 14 -> 14 baris
+Data cuaca final setelah filter 10 tahun terakhir: 63 -> 63 baris
+Data panen final setelah filter 10 tahun terakhir: 14 -> 14 baris
+Filter panen: 14 -> 14 baris untuk Kota Bandung
+Filter cuaca: 63 -> 63 baris untuk Kota Bandung
+Wilayah unik di data panen setelah filter: ['Bandung' 'Kota Bandung']
+Wilayah unik di data cuaca setelah filter: ['Kota Bandung']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 310
+Contoh prediksi (3 pertama): [0.00012218 0.00012218 0.0001221 ]
+Contoh prediksi (3 terakhir): [0.00012225 0.00012224 0.00012224]
+Prediksi untuk Kota Bandung: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Kota Banjar
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 26 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 5 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 5 -> 5 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Kota Banjar
+Filter cuaca: 5 -> 5 baris untuk Kota Banjar
+Wilayah unik di data panen setelah filter: ['Kota Banjar']
+Wilayah unik di data cuaca setelah filter: ['Kota Banjar']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+error processing Kota Banjar: Found array with 0 sample(s) (shape=(0, 60)) while a minimum of 1 is required by MinMaxScaler.
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Kota Bekasi
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 78 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 24 baris
+Data panen setelah filter 10 tahun terakhir: 14 -> 14 baris
+Data cuaca final setelah filter 10 tahun terakhir: 24 -> 24 baris
+Data panen final setelah filter 10 tahun terakhir: 14 -> 14 baris
+Filter panen: 14 -> 14 baris untuk Kota Bekasi
+Filter cuaca: 24 -> 24 baris untuk Kota Bekasi
+Wilayah unik di data panen setelah filter: ['Bekasi' 'Kota Bekasi']
+Wilayah unik di data cuaca setelah filter: ['Kota Bekasi']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 305
+Contoh prediksi (3 pertama): [0.00012278 0.00012278 0.00012279]
+Contoh prediksi (3 terakhir): [0.00012248 0.00012248 0.00012246]
+Prediksi untuk Kota Bekasi: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Kota Bogor
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 220 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 80 baris
+Data panen setelah filter 10 tahun terakhir: 14 -> 14 baris
+Data cuaca final setelah filter 10 tahun terakhir: 80 -> 80 baris
+Data panen final setelah filter 10 tahun terakhir: 14 -> 14 baris
+Filter panen: 14 -> 14 baris untuk Kota Bogor
+Filter cuaca: 80 -> 80 baris untuk Kota Bogor
+Wilayah unik di data panen setelah filter: ['Bogor' 'Kota Bogor']
+Wilayah unik di data cuaca setelah filter: ['Kota Bogor']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 309
+Contoh prediksi (3 pertama): [0.00012221 0.00012215 0.0001221 ]
+Contoh prediksi (3 terakhir): [0.00012223 0.00012221 0.00012213]
+Prediksi untuk Kota Bogor: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Kota Cimahi
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 30 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 9 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 9 -> 9 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Kota Cimahi
+Filter cuaca: 9 -> 9 baris untuk Kota Cimahi
+Wilayah unik di data panen setelah filter: ['Kota Cimahi']
+Wilayah unik di data cuaca setelah filter: ['Kota Cimahi']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+error processing Kota Cimahi: Found array with 0 sample(s) (shape=(0, 60)) while a minimum of 1 is required by MinMaxScaler.
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Kota Cirebon
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 46 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 11 baris
+Data panen setelah filter 10 tahun terakhir: 14 -> 14 baris
+Data cuaca final setelah filter 10 tahun terakhir: 11 -> 11 baris
+Data panen final setelah filter 10 tahun terakhir: 14 -> 14 baris
+Filter panen: 14 -> 14 baris untuk Kota Cirebon
+Filter cuaca: 11 -> 11 baris untuk Kota Cirebon
+Wilayah unik di data panen setelah filter: ['Cirebon' 'Kota Cirebon']
+Wilayah unik di data cuaca setelah filter: ['Kota Cirebon']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 154
+Contoh prediksi (3 pertama): [0.00012249 0.00012248 0.00012248]
+Contoh prediksi (3 terakhir): [0.00012249 0.00012249 0.00012248]
+Prediksi untuk Kota Cirebon: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Kota Depok
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 127 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 39 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 39 -> 39 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Kota Depok
+Filter cuaca: 39 -> 39 baris untuk Kota Depok
+Wilayah unik di data panen setelah filter: ['Kota Depok']
+Wilayah unik di data cuaca setelah filter: ['Kota Depok']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+error processing Kota Depok: Found array with 0 sample(s) (shape=(0, 60)) while a minimum of 1 is required by MinMaxScaler.
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Kota Sukabumi
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 39 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 12 baris
+Data panen setelah filter 10 tahun terakhir: 14 -> 14 baris
+Data cuaca final setelah filter 10 tahun terakhir: 12 -> 12 baris
+Data panen final setelah filter 10 tahun terakhir: 14 -> 14 baris
+Filter panen: 14 -> 14 baris untuk Kota Sukabumi
+Filter cuaca: 12 -> 12 baris untuk Kota Sukabumi
+Wilayah unik di data panen setelah filter: ['Sukabumi' 'Kota Sukabumi']
+Wilayah unik di data cuaca setelah filter: ['Kota Sukabumi']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 151
+Contoh prediksi (3 pertama): [0.00012254 0.00012264 0.0001226 ]
+Contoh prediksi (3 terakhir): [0.00012241 0.00012242 0.00012244]
+Prediksi untuk Kota Sukabumi: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Kota Tasikmalaya
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 65 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 17 baris
+Data panen setelah filter 10 tahun terakhir: 14 -> 14 baris
+Data cuaca final setelah filter 10 tahun terakhir: 17 -> 17 baris
+Data panen final setelah filter 10 tahun terakhir: 14 -> 14 baris
+Filter panen: 14 -> 14 baris untuk Kota Tasikmalaya
+Filter cuaca: 17 -> 17 baris untuk Kota Tasikmalaya
+Wilayah unik di data panen setelah filter: ['Tasikmalaya' 'Kota Tasikmalaya']
+Wilayah unik di data cuaca setelah filter: ['Kota Tasikmalaya']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 309
+Contoh prediksi (3 pertama): [0.00012256 0.00012249 0.00012248]
+Contoh prediksi (3 terakhir): [0.00012229 0.00012229 0.00012227]
+Prediksi untuk Kota Tasikmalaya: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Kuningan
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 52 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 12 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 12 -> 12 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Kuningan
+Filter cuaca: 12 -> 12 baris untuk Kuningan
+Wilayah unik di data panen setelah filter: ['Kuningan']
+Wilayah unik di data cuaca setelah filter: ['Kab. Kuningan']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 246
+Contoh prediksi (3 pertama): [0.00012214 0.0001222  0.00012223]
+Contoh prediksi (3 terakhir): [0.00012223 0.00012222 0.0001222 ]
+Prediksi untuk Kuningan: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Majalengka
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 49 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 4 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 4 -> 4 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Majalengka
+Filter cuaca: 4 -> 4 baris untuk Majalengka
+Wilayah unik di data panen setelah filter: ['Majalengka']
+Wilayah unik di data cuaca setelah filter: ['Kab. Majalengka']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 94
+Contoh prediksi (3 pertama): [0.00012278 0.0001228  0.0001228 ]
+Contoh prediksi (3 terakhir): [0.00012278 0.00012278 0.00012274]
+Prediksi untuk Majalengka: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Pangandaran
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 38 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 9 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 9 -> 9 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Pangandaran
+Filter cuaca: 9 -> 9 baris untuk Pangandaran
+Wilayah unik di data panen setelah filter: ['Pangandaran']
+Wilayah unik di data cuaca setelah filter: ['Kab. Pangandaran']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 147
+Contoh prediksi (3 pertama): [0.00012208 0.00012204 0.00012227]
+Contoh prediksi (3 terakhir): [0.00012237 0.00012236 0.00012235]
+Prediksi untuk Pangandaran: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Purwakarta
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 36 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 8 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 8 -> 8 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Purwakarta
+Filter cuaca: 8 -> 8 baris untuk Purwakarta
+Wilayah unik di data panen setelah filter: ['Purwakarta']
+Wilayah unik di data cuaca setelah filter: ['Kab. Purwakarta']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 298
+Contoh prediksi (3 pertama): [0.0001223  0.00012227 0.00012228]
+Contoh prediksi (3 terakhir): [0.00012232 0.00012232 0.00012231]
+Prediksi untuk Purwakarta: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Subang
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 46 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 13 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 13 -> 13 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Subang
+Filter cuaca: 13 -> 13 baris untuk Subang
+Wilayah unik di data panen setelah filter: ['Subang']
+Wilayah unik di data cuaca setelah filter: ['Kab. Subang']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 253
+Contoh prediksi (3 pertama): [0.0001274  0.0001276  0.00012775]
+Contoh prediksi (3 terakhir): [0.0001272 0.0001272 0.0001271]
+Prediksi untuk Subang: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Sukabumi
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 255 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 85 baris
+Data panen setelah filter 10 tahun terakhir: 14 -> 14 baris
+Data cuaca final setelah filter 10 tahun terakhir: 85 -> 85 baris
+Data panen final setelah filter 10 tahun terakhir: 14 -> 14 baris
+Filter panen: 14 -> 14 baris untuk Sukabumi
+Filter cuaca: 85 -> 85 baris untuk Sukabumi
+Wilayah unik di data panen setelah filter: ['Sukabumi' 'Kota Sukabumi']
+Wilayah unik di data cuaca setelah filter: ['Kab. Sukabumi' 'Kota Sukabumi']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 253
+Contoh prediksi (3 pertama): [0.00012257 0.00012264 0.00012264]
+Contoh prediksi (3 terakhir): [0.00012235 0.00012239 0.00012239]
+Prediksi untuk Sukabumi: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Sumedang
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 85 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 18 baris
+Data panen setelah filter 10 tahun terakhir: 7 -> 7 baris
+Data cuaca final setelah filter 10 tahun terakhir: 18 -> 18 baris
+Data panen final setelah filter 10 tahun terakhir: 7 -> 7 baris
+Filter panen: 7 -> 7 baris untuk Sumedang
+Filter cuaca: 18 -> 18 baris untuk Sumedang
+Wilayah unik di data panen setelah filter: ['Sumedang']
+Wilayah unik di data cuaca setelah filter: ['Kab. Sumedang']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 195
+Contoh prediksi (3 pertama): [0.00012223 0.00012221 0.00012221]
+Contoh prediksi (3 terakhir): [0.00012222 0.00012222 0.00012223]
+Prediksi untuk Sumedang: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+Memuat model dan artefak...
+Menggunakan data historis dari 2015 hingga 2025 (10 tahun terakhir)
+Memprediksi untuk wilayah: Tasikmalaya
+Bulan penanaman: 10 (October 2026)
+Periode prediksi: 2026-10-01 hingga 2026-12-30
+Memuat data dari file CSV lokal...
+Data cuaca: 2305 -> 2305 baris (setelah filter 10 tahun: 2015-2025)
+Data panen: 999 -> 189 baris (setelah filter 10 tahun: 2015-2025)
+Data panen dimuat: (189, 5) baris
+Data cuaca dimuat: (2305, 5) baris
+Data cuaca setelah filter 10 tahun terakhir: 115 baris
+Mengambil data historis untuk bulan: [10, 11, 12]
+Data cuaca historis untuk periode penanaman: 29 baris
+Data panen setelah filter 10 tahun terakhir: 14 -> 14 baris
+Data cuaca final setelah filter 10 tahun terakhir: 29 -> 29 baris
+Data panen final setelah filter 10 tahun terakhir: 14 -> 14 baris
+Filter panen: 14 -> 14 baris untuk Tasikmalaya
+Filter cuaca: 29 -> 29 baris untuk Tasikmalaya
+Wilayah unik di data panen setelah filter: ['Tasikmalaya' 'Kota Tasikmalaya']
+Wilayah unik di data cuaca setelah filter: ['Kota Tasikmalaya' 'Kab. Tasikmalaya']
+Memproses data...
+Memulai pra-pemrosesan fitur...
+Membuat sekuens (windowing) dengan panjang 12...
+Menjalankan prediksi...
+Jumlah sequence yang diprediksi: 309
+Contoh prediksi (3 pertama): [0.00012256 0.00012249 0.00012248]
+Contoh prediksi (3 terakhir): [0.00012229 0.00012229 0.00012223]
+Prediksi untuk Tasikmalaya: 0.0001
+Forecast menggunakan data cuaca dari 2015 hingga 2025 (10 tahun terakhir)
+[
+  {
+    "region": "Indramayu",
+    "probability": 0.0002,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Bandung",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Bandung Barat",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Bekasi",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Bogor",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Ciamis",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Cianjur",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Cirebon",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Garut",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Karawang",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Kota Bandung",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Kota Bekasi",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Kota Bogor",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Kota Cirebon",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Kota Sukabumi",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Kota Tasikmalaya",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Kuningan",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Majalengka",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Pangandaran",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Purwakarta",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Subang",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Sukabumi",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Sumedang",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  },
+  {
+    "region": "Tasikmalaya",
+    "probability": 0.0001,
+    "risk_level": "Rendah"
+  }
+]

@@ -118,16 +118,44 @@ const PredictionPage: React.FC = () => {
     setIsSubmittingApi(true);
 
     try {
+      // Validasi input
+      if (!region) {
+        throw new Error('Wilayah harus dipilih');
+      }
+
+      // Konversi bulan dari format YYYY-MM ke planting_month (1-12)
+      let plantingMonth: number | undefined = undefined;
+      if (month && typeof month === 'string') {
+        const monthParts = month.split('-');
+        if (monthParts.length === 2 && monthParts[1]) {
+          const monthNum = parseInt(monthParts[1], 10);
+          if (monthNum >= 1 && monthNum <= 12) {
+            plantingMonth = monthNum;
+          }
+        }
+      }
+
       // Panggil backend yang kemudian meneruskan ke layanan ML FastAPI
+      const requestBody: {
+        region: string;
+        use_csv: boolean;
+        planting_month?: number;
+      } = {
+        region: region, // region sudah divalidasi di atas
+        use_csv: true, // Gunakan CSV untuk development
+      };
+      
+      // Tambahkan planting_month jika ada
+      if (plantingMonth !== undefined) {
+        requestBody.planting_month = plantingMonth;
+      }
+
       const resp = await fetch('http://localhost:4000/api/ml/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          region,
-          month,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!resp.ok) {

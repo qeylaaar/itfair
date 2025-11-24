@@ -1,0 +1,139 @@
+{
+  "region": "Bandung",
+  "probability": 0.0001,
+  "threshold": 0.5,
+  "prediction": "Normal",
+  "risk_level": "Rendah",
+  "confidence": "Tinggi",
+  "reasons": [
+    "Probabilitas gagal panen sangat rendah (<30%)"
+  ],
+  "mitigation_recommendations": [
+    "- Perbaiki saluran drainase untuk mengatasi hujan lebat",
+    "- Hindari penanaman di area yang rawan banjir",
+    "- Gunakan varietas padi yang tahan genangan",
+    "- Tanam tanaman pelindung di sekeliling lahan",
+    "- Perkuat struktur penopang tanaman jika diperlukan",
+    "- Waspada terhadap puting beliung, siapkan rencana evakuasi",
+    "[GUIDE] PERAWATAN RUTIN LAHAN PADI:",
+    "- Lakukan penyiangan gulma secara berkala",
+    "- Pantau ketersediaan air irigasi",
+    "- Lakukan pemupukan berimbang (N, P, K)",
+    "- Kontrol hama dan penyakit dengan pestisida yang tepat",
+    "- Gunakan benih berkualitas dan varietas yang sesuai",
+    "- Lakukan rotasi tanaman untuk menjaga kesuburan tanah",
+    "- Terapkan sistem tanam jajar legowo untuk hasil optimal"
+  ],
+  "weather_forecast": {
+    "forecast": [
+      {
+        "bulan": 10,
+        "tahun": 2026,
+        "nama_bulan": "October 2026",
+        "prediksi_kejadian": 3.4,
+        "cuaca_ekstrem": {
+          "Hujan Lebat": 2.7,
+          "Angin Kencang": 1.1,
+          "Puting Beliung": 0.4
+        },
+        "catatan": "Berdasarkan rata-rata 3.4 kejadian historis per tahun di bulan October"
+      },
+      {
+        "bulan": 11,
+        "tahun": 2026,
+        "nama_bulan": "November 2026",
+        "prediksi_kejadian": 4.6,
+        "cuaca_ekstrem": {
+          "Hujan Lebat": 4.0,
+          "Angin Kencang": 2.1,
+          "Puting Beliung": 0.1
+        },
+        "catatan": "Berdasarkan rata-rata 4.6 kejadian historis per tahun di bulan November"
+      },
+      {
+        "bulan": 12,
+        "tahun": 2026,
+        "nama_bulan": "December 2026",
+        "prediksi_kejadian": 5.9,
+        "cuaca_ekstrem": {
+          "Hujan Lebat": 5.3,
+          "Angin Kencang": 1.4,
+          "Puting Beliung": 0.6
+        },
+        "catatan": "Berdasarkan rata-rata 5.9 kejadian historis per tahun di bulan December"
+      }
+    ],
+    "planting_month": 10,
+    "planting_year": 2026,
+    "note": "Prediksi cuaca untuk 3 bulan setelah penanaman di October 2026. Berdasarkan pola historis data cuaca ekstrem."
+  },
+  "web_summary": {
+    "sections": [
+      {
+        "title": "Hasil Prediksi AI",
+        "content": [
+          "Normal (Probabilitas 0.0%, Risiko Rendah)"
+        ]
+      },
+      {
+        "title": "Analisis & Alasan Prediksi",
+        "content": [
+          "Probabilitas gagal panen sangat rendah (<30%)"
+        ]
+      },
+      {
+        "title": "Data Cuaca Historis (30 October 2018 - 18 December 2024)",
+        "content": [
+          "Suhu Rata-rata: Data tidak tersedia",
+          "Kelembapan: Data tidak tersedia",
+          "Curah Hujan: Data tidak tersedia",
+          "Angin: Data tidak tersedia"
+        ]
+      },
+      {
+        "title": "Ringkasan Cuaca",
+        "content": [
+          "Kejadian paling sering: Hujan Lebat (84 kali) selama periode historis."
+        ]
+      },
+      {
+        "title": "Kesimpulan Detail",
+        "content": [
+          "Prediksi akhir: Normal dengan probabilitas 0.0% dan level risiko Rendah."
+        ]
+      },
+      {
+        "title": "Rekomendasi Mitigasi Penanganan",
+        "subsections": [
+          {
+            "subtitle": "Mitigasi Prioritas",
+            "content": [
+              "- Perbaiki saluran drainase untuk mengatasi hujan lebat",
+              "- Hindari penanaman di area yang rawan banjir",
+              "- Gunakan varietas padi yang tahan genangan",
+              "- Tanam tanaman pelindung di sekeliling lahan",
+              "- Perkuat struktur penopang tanaman jika diperlukan",
+              "- Waspada terhadap puting beliung, siapkan rencana evakuasi",
+              "[GUIDE] PERAWATAN RUTIN LAHAN PADI:",
+              "- Lakukan penyiangan gulma secara berkala",
+              "- Pantau ketersediaan air irigasi",
+              "- Lakukan pemupukan berimbang (N, P, K)",
+              "- Kontrol hama dan penyakit dengan pestisida yang tepat",
+              "- Gunakan benih berkualitas dan varietas yang sesuai",
+              "- Lakukan rotasi tanaman untuk menjaga kesuburan tanah",
+              "- Terapkan sistem tanam jajar legowo untuk hasil optimal"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Prakiraan Cuaca BMKG (3 Bulan Kedepan)",
+        "content": [
+          "October 2026: 3.4 potensi kejadian ekstrem (Dominan: Hujan Lebat, Angin Kencang). Berdasarkan rata-rata 3.4 kejadian historis per tahun di bulan October",
+          "November 2026: 4.6 potensi kejadian ekstrem (Dominan: Hujan Lebat, Angin Kencang). Berdasarkan rata-rata 4.6 kejadian historis per tahun di bulan November",
+          "December 2026: 5.9 potensi kejadian ekstrem (Dominan: Hujan Lebat, Angin Kencang). Berdasarkan rata-rata 5.9 kejadian historis per tahun di bulan December"
+        ]
+      }
+    ]
+  }
+}

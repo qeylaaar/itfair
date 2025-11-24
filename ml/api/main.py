@@ -25,6 +25,7 @@ class PredictionRequest(BaseModel):
     region: str
     start_date: Optional[str] = None
     use_csv: bool = True
+    planting_month: Optional[int] = None  # Bulan penanaman (1-12) untuk prediksi 3 bulan ke depan
 
 class PredictionResponse(BaseModel):
     region: str
@@ -36,6 +37,7 @@ class PredictionResponse(BaseModel):
     reasons: list = []
     mitigation_recommendations: list = []
     weather_forecast: dict = {}
+    web_summary: dict = {}  # Tambahkan web_summary untuk frontend
 
 @app.get("/health")
 async def health_check():
@@ -65,15 +67,28 @@ async def predict_harvest_failure(request: PredictionRequest):
         PredictionResponse dengan hasil prediksi
     """
     try:
+        # Validasi planting_month jika diberikan
+        if request.planting_month is not None:
+            if not (1 <= request.planting_month <= 12):
+                raise HTTPException(
+                    status_code=400,
+                    detail="planting_month harus antara 1-12"
+                )
+        
         result = pred_module.predict_harvest_failure(
             region_name=request.region,
             start_date=request.start_date,
-            use_csv=request.use_csv
+            use_csv=request.use_csv,
+            planting_month=request.planting_month
         )
         
         # Jika ada error dalam result
         if 'error' in result:
             raise HTTPException(status_code=404, detail=result['error'])
+        
+        # Pastikan web_summary ada di result
+        if 'web_summary' not in result:
+            result['web_summary'] = {}
         
         return PredictionResponse(**result)
     
@@ -119,8 +134,14 @@ async def get_available_regions():
     """
     try:
         # Baca langsung data kabupaten/kota dari Excel di folder data
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # root ml/
+        # __file__ adalah ml/api/main.py, jadi naik 2 level ke root ml/
+        current_file = os.path.abspath(__file__)
+        base_dir = os.path.dirname(os.path.dirname(current_file))  # root ml/
         panen_path = os.path.join(base_dir, "data", "sample_data_panen.xlsx")
+        
+        # Pastikan file exists
+        if not os.path.exists(panen_path):
+            raise FileNotFoundError(f"File data tidak ditemukan: {panen_path}")
 
         df_harvest = pd.read_excel(panen_path)
 
@@ -150,10 +171,27 @@ async def get_available_regions():
             "regions": regions,
             "total": len(regions)
         }
-    except Exception as e:
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=404,
+            detail=f"File data tidak ditemukan: {str(e)}"
+        )
+    except ImportError as e:
+        if 'openpyxl' in str(e).lower():
+            raise HTTPException(
+                status_code=500,
+                detail="Modul openpyxl tidak ditemukan. Install dengan: pip install openpyxl"
+            )
         raise HTTPException(
             status_code=500,
-            detail=f"Error saat mengambil daftar wilayah: {str(e)}"
+            detail=f"Error import: {str(e)}"
+        )
+    except Exception as e:
+        import traceback
+        error_detail = f"Error saat mengambil daftar wilayah: {str(e)}\nTraceback: {traceback.format_exc()}"
+        raise HTTPException(
+            status_code=500,
+            detail=error_detail
         )
 
 # Serve static files

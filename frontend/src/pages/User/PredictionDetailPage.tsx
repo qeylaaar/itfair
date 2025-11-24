@@ -341,8 +341,52 @@ const PredictionDetailPage: React.FC = () => {
                   Rekomendasi Mitigasi Penanganan
                 </h2>
                 <div className="space-y-5">
-                  {mitigationSection && Array.isArray(mitigationSection.subsections)
-                    ? mitigationSection.subsections.map((sub: any, index: number) => (
+                  {/* Tampilkan rekomendasi dari ML jika ada */}
+                  {mlResult?.mitigation_recommendations && Array.isArray(mlResult.mitigation_recommendations) ? (
+                    <div className="space-y-4">
+                      {mlResult.mitigation_recommendations.map((rec: string, index: number) => {
+                        // Deteksi kategori rekomendasi berdasarkan emoji atau prefix
+                        if (rec.startsWith('\n') || rec.startsWith('[') || rec.match(/^[🌡️💧🌧️💨⚠️📋]/)) {
+                          // Ini adalah header/kategori
+                          return (
+                            <div key={index} className="mt-4">
+                              <h3 className="text-sm font-semibold text-gray-800 mb-2">
+                                {rec.replace(/^[\n\s]*/, '')}
+                              </h3>
+                            </div>
+                          );
+                        } else if (rec.startsWith('- ')) {
+                          // Ini adalah item rekomendasi
+                          return (
+                            <div key={index} className="flex items-start gap-2">
+                              <span className="text-green-500 mt-1">•</span>
+                              <p className="text-sm text-gray-700 leading-relaxed flex-1">
+                                {rec.replace(/^-\s*/, '')}
+                              </p>
+                            </div>
+                          );
+                        } else if (rec.startsWith('  •')) {
+                          // Sub-item rekomendasi
+                          return (
+                            <div key={index} className="flex items-start gap-2 ml-4">
+                              <span className="text-gray-400 mt-1">-</span>
+                              <p className="text-sm text-gray-600 leading-relaxed flex-1">
+                                {rec.replace(/^\s*•\s*/, '')}
+                              </p>
+                            </div>
+                          );
+                        } else {
+                          // Teks biasa
+                          return (
+                            <p key={index} className="text-sm text-gray-700 leading-relaxed">
+                              {rec}
+                            </p>
+                          );
+                        }
+                      })}
+                    </div>
+                  ) : mitigationSection && Array.isArray(mitigationSection.subsections) ? (
+                    mitigationSection.subsections.map((sub: any, index: number) => (
                         <div key={index} className="relative pl-4 border-l-2 border-green-500">
                           <h3 className="text-sm font-semibold text-gray-800 mb-2">
                             {sub.subtitle || 'Mitigasi'}
@@ -355,7 +399,8 @@ const PredictionDetailPage: React.FC = () => {
                           </ul>
                         </div>
                       ))
-                    : prediction.mitigation.map((item, index) => (
+                  ) : (
+                    prediction.mitigation.map((item, index) => (
                         <div key={index} className="relative pl-4 border-l-2 border-green-500">
                           <h3 className="text-sm font-semibold text-gray-800 mb-2">
                             {item.title}
@@ -366,7 +411,8 @@ const PredictionDetailPage: React.FC = () => {
                             ))}
                           </ul>
                         </div>
-                      ))}
+                    ))
+                  )}
                 </div>
               </div>
             </div>
@@ -379,13 +425,39 @@ const PredictionDetailPage: React.FC = () => {
                  Prakiraan Cuaca BMKG (3 Bulan Kedepan)
                 </h2>
                 <div className="space-y-4">
-                 {forecastSection && Array.isArray(forecastSection.content)
-                    ? forecastSection.content.map((line: string, index: number) => (
+                  {/* Tampilkan forecast dari ML jika ada */}
+                  {mlResult?.weather_forecast?.forecast && Array.isArray(mlResult.weather_forecast.forecast) ? (
+                    mlResult.weather_forecast.forecast.map((item: any, index: number) => (
+                      <div key={index} className="pb-4 border-b border-gray-200 last:border-b-0">
+                        <h3 className="text-sm font-semibold text-gray-800 mb-1">
+                          {item.nama_bulan || `${item.bulan}/${item.tahun}`}
+                        </h3>
+                        <p className="text-sm font-medium text-gray-800 mb-1">
+                          Prediksi Kejadian: {item.prediksi_kejadian} kejadian
+                        </p>
+                        {item.cuaca_ekstrem && Object.keys(item.cuaca_ekstrem).length > 0 && (
+                          <div className="mt-2">
+                            <p className="text-xs font-semibold text-gray-700 mb-1">Cuaca Ekstrem:</p>
+                            <ul className="list-disc list-inside text-xs text-gray-600 space-y-0.5">
+                              {Object.entries(item.cuaca_ekstrem).slice(0, 3).map(([event, count]: [string, any]) => (
+                                <li key={event}>{event}: {count}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        {item.catatan && (
+                          <p className="text-xs text-gray-600 mt-2 italic">{item.catatan}</p>
+                        )}
+                      </div>
+                    ))
+                  ) : forecastSection && Array.isArray(forecastSection.content) ? (
+                    forecastSection.content.map((line: string, index: number) => (
                         <div key={index} className="pb-4 border-b border-gray-200 last:border-b-0">
                           <p className="text-sm text-gray-700">{line}</p>
                         </div>
                       ))
-                    : prediction.future_weather_forecast.map((forecast, index) => (
+                  ) : (
+                    prediction.future_weather_forecast.map((forecast, index) => (
                         <div key={index} className="pb-4 border-b border-gray-200 last:border-b-0">
                           <h3 className="text-sm font-semibold text-gray-800">
                             {forecast.month}
@@ -395,7 +467,8 @@ const PredictionDetailPage: React.FC = () => {
                           </p>
                           <p className="text-sm text-gray-600">{forecast.details}</p>
                         </div>
-                      ))}
+                    ))
+                  )}
                 </div>
               </div>
             </div>

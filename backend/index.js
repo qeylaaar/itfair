@@ -124,25 +124,38 @@ app.get('/api/ml/regions', async (req, res) => {
 // Proxy prediksi gagal panen ke layanan ML FastAPI
 app.post('/api/ml/predict', async (req, res) => {
   try {
-    const { region, month } = req.body || {};
+    const { region, month, planting_month, use_csv } = req.body || {};
 
-    if (!region || !month) {
-      return res.status(400).json({ error: 'region_and_month_required' });
+    if (!region) {
+      return res.status(400).json({ error: 'region_required' });
     }
 
-    // Convert month (YYYY-MM) ke start_date (YYYY-MM-01)
-    const start_date = `${month}-01`;
+    // Build request body untuk FastAPI
+    const requestBody = {
+      region,
+      use_csv: use_csv !== undefined ? use_csv : true,
+    };
+
+    // Jika ada planting_month, gunakan itu (prioritas lebih tinggi)
+    if (planting_month !== undefined && planting_month !== null) {
+      requestBody.planting_month = planting_month;
+    } else if (month) {
+      // Convert month (YYYY-MM) ke planting_month (1-12)
+      const monthParts = month.split('-');
+      if (monthParts.length === 2) {
+        const monthNum = parseInt(monthParts[1], 10);
+        if (monthNum >= 1 && monthNum <= 12) {
+          requestBody.planting_month = monthNum;
+        }
+      }
+    }
 
     const resp = await fetch('http://127.0.0.1:8001/predict', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        region,
-        start_date,
-        use_csv: true,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     if (!resp.ok) {

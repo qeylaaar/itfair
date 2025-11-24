@@ -1,6 +1,7 @@
 # --- Core ML & Data ---
 tensorflow
 pandas
+openpyxl          # Untuk membaca file Excel (.xlsx)
 scikit-learn
 joblib
 

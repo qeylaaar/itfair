@@ -38,6 +38,9 @@ TUNER_OBJECTIVE = tf.keras.metrics.Recall(name="val_recall")
 # Nilai default 0.5 di-override oleh skrip train.py.
 OPTIMAL_THRESHOLD = 0.5
 
+# Jumlah tahun historis yang digunakan untuk prediksi (10 tahun terakhir)
+HISTORICAL_YEARS_FOR_PREDICTION = 10
+
 # --- Path Penyimpanan Artefak ---
 # Bangun path absolut relatif terhadap lokasi file ini (ml/src/config.py)
 _BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # root ml/

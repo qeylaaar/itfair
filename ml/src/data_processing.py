@@ -45,13 +45,42 @@ def _get_api_client() -> Client:
     return create_client(url, key) [12, 63, 73, 2, 74, 10, 75, 11, 76, 77]
 
 def load_training_data() -> (pd.DataFrame, pd.DataFrame):
-    """Menarik SEMUA data panen dan cuaca untuk pelatihan model."""
-    print("Menarik data pelatihan dari Supabase (via koneksi DB langsung)...")
+    """Menarik data panen dan cuaca untuk pelatihan model (10 tahun terakhir)."""
+    from datetime import datetime
+    import config
+    
+    current_year = datetime.now().year
+    min_year = current_year - config.HISTORICAL_YEARS_FOR_PREDICTION
+    
+    print(f"Menarik data pelatihan dari Supabase (10 tahun terakhir: {min_year}-{current_year})...")
     engine = _get_db_engine()
     # Ganti 'harvest_data' dan 'weather_events' dengan nama tabel Anda di Supabase
     try:
-        df_harvest = pd.read_sql_query("SELECT * FROM harvest_data", con=engine) [78, 79, 80, 81, 63, 3, 4, 82, 9, 83, 84]
-        df_weather = pd.read_sql_query("SELECT * FROM weather_events", con=engine) [78, 79, 80, 81, 63, 3, 4, 82, 9, 83, 84]
+        # Filter data hanya dari 10 tahun terakhir
+        df_harvest = pd.read_sql_query("SELECT * FROM harvest_data", con=engine)
+        df_weather = pd.read_sql_query("SELECT * FROM weather_events", con=engine)
+        
+        # Filter berdasarkan tahun
+        if 'Tahun' in df_harvest.columns:
+            before_count = len(df_harvest)
+            df_harvest = df_harvest[df_harvest['Tahun'] >= min_year].copy()
+            print(f"Data panen: {before_count} -> {len(df_harvest)} baris (setelah filter 10 tahun)")
+        elif 'Tanggal' in df_harvest.columns:
+            df_harvest['Tanggal'] = pd.to_datetime(df_harvest['Tanggal'], errors='coerce')
+            df_harvest['Tahun'] = df_harvest['Tanggal'].dt.year
+            before_count = len(df_harvest)
+            df_harvest = df_harvest[df_harvest['Tahun'] >= min_year].copy()
+            df_harvest = df_harvest.drop(columns=['Tahun'])
+            print(f"Data panen: {before_count} -> {len(df_harvest)} baris (setelah filter 10 tahun)")
+        
+        if 'Tanggal' in df_weather.columns:
+            df_weather['Tanggal'] = pd.to_datetime(df_weather['Tanggal'], errors='coerce')
+            df_weather['Tahun'] = df_weather['Tanggal'].dt.year
+            before_count = len(df_weather)
+            df_weather = df_weather[df_weather['Tahun'] >= min_year].copy()
+            df_weather = df_weather.drop(columns=['Tahun'])
+            print(f"Data cuaca: {before_count} -> {len(df_weather)} baris (setelah filter 10 tahun)")
+        
         print(f"Data panen dimuat: {df_harvest.shape} baris")
         print(f"Data cuaca dimuat: {df_weather.shape} baris")
         return df_harvest, df_weather
@@ -71,7 +100,9 @@ def load_prediction_data(region_name: str, start_date: str) -> (pd.DataFrame, pd
     return pd.DataFrame(harvest_response.data), pd.DataFrame(weather_response.data)
 
 def load_data_from_csv():
-    """Memuat data dari file CSV lokal untuk pengembangan/testing."""
+    """Memuat data dari file CSV lokal untuk pengembangan/testing (10 tahun terakhir)."""
+    from datetime import datetime
+    
     print("Memuat data dari file CSV lokal...")
     
     # Gunakan path absolut berdasarkan lokasi file ini
@@ -83,6 +114,30 @@ def load_data_from_csv():
     df_harvest = pd.read_csv(PANEN_DATA_PATH, sep=';')
     df_weather = pd.read_csv(CUACA_DATA_PATH, sep=';')
     df_weather[config.DATE_COLUMN] = pd.to_datetime(df_weather[config.DATE_COLUMN])
+    
+    # Filter data hanya dari 10 tahun terakhir
+    current_year = datetime.now().year
+    min_year = current_year - config.HISTORICAL_YEARS_FOR_PREDICTION
+    
+    # Filter data cuaca
+    df_weather['Tahun'] = df_weather[config.DATE_COLUMN].dt.year
+    before_count_weather = len(df_weather)
+    df_weather = df_weather[df_weather['Tahun'] >= min_year].copy()
+    df_weather = df_weather.drop(columns=['Tahun'])
+    print(f"Data cuaca: {before_count_weather} -> {len(df_weather)} baris (setelah filter 10 tahun: {min_year}-{current_year})")
+    
+    # Filter data panen
+    if 'Tahun' in df_harvest.columns:
+        before_count_harvest = len(df_harvest)
+        df_harvest = df_harvest[df_harvest['Tahun'] >= min_year].copy()
+        print(f"Data panen: {before_count_harvest} -> {len(df_harvest)} baris (setelah filter 10 tahun: {min_year}-{current_year})")
+    elif config.DATE_COLUMN in df_harvest.columns:
+        df_harvest[config.DATE_COLUMN] = pd.to_datetime(df_harvest[config.DATE_COLUMN], errors='coerce')
+        df_harvest['Tahun'] = df_harvest[config.DATE_COLUMN].dt.year
+        before_count_harvest = len(df_harvest)
+        df_harvest = df_harvest[df_harvest['Tahun'] >= min_year].copy()
+        df_harvest = df_harvest.drop(columns=['Tahun'])
+        print(f"Data panen: {before_count_harvest} -> {len(df_harvest)} baris (setelah filter 10 tahun: {min_year}-{current_year})")
     
     print(f"Data panen dimuat: {df_harvest.shape} baris")
     print(f"Data cuaca dimuat: {df_weather.shape} baris")
@@ -173,6 +228,10 @@ def preprocess_features(df_harvest: pd.DataFrame, df_weather: pd.DataFrame, scal
     # Agregasi Harian ke Mingguan: Hitung JUMLAH kejadian per minggu
     # Set index ke Tanggal, lalu groupby Wilayah dan resample
     # Simpan Wilayah sebagai kolom terpisah sebelum set_index
+    
+    # PENTING: Pastikan data diurutkan berdasarkan Wilayah dan Tanggal sebelum resample
+    df_weather_proc = df_weather_proc.sort_values(by=['Wilayah', config.DATE_COLUMN]).reset_index(drop=True)
+    
     df_weather_proc_indexed = df_weather_proc.set_index(config.DATE_COLUMN)
     
     # Groupby dan resample, pastikan Wilayah tetap ada
@@ -186,6 +245,9 @@ def preprocess_features(df_harvest: pd.DataFrame, df_weather: pd.DataFrame, scal
     # Reset index untuk mendapatkan Tanggal sebagai kolom
     df_weather_weekly = df_weather_weekly.reset_index()
     
+    # Pastikan urutan tetap konsisten: Wilayah, lalu Tanggal
+    df_weather_weekly = df_weather_weekly.sort_values(by=['Wilayah', config.DATE_COLUMN]).reset_index(drop=True)
+    
     df_weather_weekly['Tahun'] = df_weather_weekly[config.DATE_COLUMN].dt.year
 
     # === 3. Gabungkan Data Panen dan Cuaca ===
@@ -196,6 +258,9 @@ def preprocess_features(df_harvest: pd.DataFrame, df_weather: pd.DataFrame, scal
         on=['Wilayah', 'Tahun'],
         how='left' # Jaga semua data cuaca, cocokkan data panen jika ada
     )
+    
+    # Pastikan data merged juga diurutkan berdasarkan Wilayah dan Tanggal
+    df_merged = df_merged.sort_values(by=['Wilayah', config.DATE_COLUMN]).reset_index(drop=True)
     
     # Isi data panen (LuasPanen, GagalPanen) ke semua minggu dalam tahun itu
     cols_to_fill = ['LuasPanen']
@@ -210,6 +275,12 @@ def preprocess_features(df_harvest: pd.DataFrame, df_weather: pd.DataFrame, scal
     
     # === 4. Normalisasi Fitur (X) ===
     # Tentukan fitur (X) dan label (y)
+    
+    # PENTING: Untuk prediksi, pastikan data diurutkan berdasarkan tanggal per wilayah
+    # agar sequence dibuat dengan benar untuk setiap wilayah
+    if not is_training:
+        df_merged = df_merged.sort_values(by=['Wilayah', config.DATE_COLUMN]).reset_index(drop=True)
+    
     # Hapus kolom non-fitur
     cols_to_drop = ['Wilayah', config.DATE_COLUMN, 'Tahun', 'Produktivitas', 'Rekap Produksi Padi (ton)']
     if is_training:
@@ -235,13 +306,32 @@ def preprocess_features(df_harvest: pd.DataFrame, df_weather: pd.DataFrame, scal
 
     # === 5. Buat Sekuens (Windowing) ===
     print(f"Membuat sekuens (windowing) dengan panjang {config.SEQUENCE_LENGTH}...")
-    dataset = timeseries_dataset_from_array(
-        data=scaled_features,
-        targets=labels if is_training else None,
-        sequence_length=config.SEQUENCE_LENGTH,
-        sequence_stride=config.SEQUENCE_STRIDE,
-        batch_size=config.BATCH_SIZE if is_training else 1, # Batch 1 untuk prediksi
-        shuffle=is_training # Acak hanya saat pelatihan
-    )
+    
+    if is_training:
+        # Untuk training: buat sequence dari semua data (sudah di-shuffle nanti)
+        dataset = timeseries_dataset_from_array(
+            data=scaled_features,
+            targets=labels,
+            sequence_length=config.SEQUENCE_LENGTH,
+            sequence_stride=config.SEQUENCE_STRIDE,
+            batch_size=config.BATCH_SIZE,
+            shuffle=True
+        )
+    else:
+        # Untuk prediksi: buat sequence per wilayah
+        # Simpan informasi wilayah sebelum di-drop
+        wilayah_info = df_merged['Wilayah'].values if 'Wilayah' in df_merged.columns else None
+        
+        # Buat sequence hanya dari data wilayah yang diminta (harusnya sudah di-filter di predict.py)
+        # Tapi untuk memastikan, kita buat sequence dari semua data yang ada
+        # dan ambil yang terakhir (paling recent)
+        dataset = timeseries_dataset_from_array(
+            data=scaled_features,
+            targets=None,
+            sequence_length=config.SEQUENCE_LENGTH,
+            sequence_stride=config.SEQUENCE_STRIDE,
+            batch_size=1,
+            shuffle=False  # Jangan shuffle untuk prediksi, ambil urutan temporal
+        )
     
     return dataset, scaler, labels if is_training else None
