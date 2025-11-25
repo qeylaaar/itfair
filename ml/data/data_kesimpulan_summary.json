@@ -1,0 +1,32 @@
+{
+  "total_records": 189,
+  "failed_percentage": 52.910052910052904,
+  "period": {
+    "min_year": 2018,
+    "max_year": 20204
+  },
+  "columns": [
+    "kabupaten_kota",
+    "tahun",
+    "hasil_panen",
+    "status_panen",
+    "label_gagal",
+    "delta_ton",
+    "cuaca_total_event",
+    "dampak_total_event",
+    "event_hujan_lebat",
+    "event_angin_kencang",
+    "event_puting_beliung",
+    "event_hujan_es",
+    "event_petir",
+    "event_suhu_ekstrem",
+    "event_jarak_pandang",
+    "impact_banjir",
+    "impact_tanah_longsor",
+    "impact_pohon_tumbang",
+    "impact_bangunan_rusak",
+    "impact_gangguan_transport",
+    "impact_korban_jiwa",
+    "impact_tidak_ada_data"
+  ]
+}
