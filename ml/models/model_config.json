@@ -1,9 +1,1 @@
-{
-  "optimal_threshold": 0.5,
-  "input_shape": [
-    12,
-    60
-  ],
-  "sequence_length": 12,
-  "validation_f1": 0.0
-}
+{"input_shape": [6, 18], "sequence_length": 6, "n_features": 18}

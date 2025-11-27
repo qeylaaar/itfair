@@ -335,3 +335,127 @@ def preprocess_features(df_harvest: pd.DataFrame, df_weather: pd.DataFrame, scal
         )
     
     return dataset, scaler, labels if is_training else None
+
+def load_kesimpulan_sequences(kesimpulan_path: str = None, is_training: bool = True, scaler=None, region_filter: str = None, desired_seq_len: int = None):
+    """Memuat data dari data_kesimpulan_processed.csv dan membentuk sekuens tahunan per wilayah.
+
+    Struktur kolom yang diharapkan (contoh):
+      - 'kabupaten_kota' (region), 'tahun' (int), 'label_gagal' (0/1)
+      - Fitur numerik lain: 'hasil_panen', 'delta_ton', 'cuaca_total_event', 'impact_*', 'event_*', dll.
+
+    Mengembalikan: (dataset_tf, scaler, labels or None)
+    """
+    import pandas as pd
+    from sklearn.preprocessing import MinMaxScaler
+    from tensorflow.keras.utils import timeseries_dataset_from_array
+    import tensorflow as tf
+
+    # Tentukan path default
+    if kesimpulan_path is None:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(current_dir)  # ml/
+        kesimpulan_path = os.path.join(project_root, 'data', 'data_kesimpulan_processed.csv')
+
+    print(f"Memuat data kesimpulan dari: {kesimpulan_path}")
+    if not os.path.exists(kesimpulan_path):
+        print("ERROR: File data_kesimpulan_processed.csv tidak ditemukan.")
+        return tf.data.Dataset.from_tensor_slices(([])), None, None
+
+    df = pd.read_csv(kesimpulan_path)
+
+    # Normalisasi nama kolom sesuai pipeline
+    rename_map = {
+        'kabupaten_kota': 'Wilayah',
+        'tahun': 'Tahun',
+        'label_gagal': 'GagalPanen'
+    }
+    df = df.rename(columns=rename_map)
+
+    # Pastikan kolom kunci ada
+    required_cols = ['Wilayah', 'Tahun']
+    for col in required_cols:
+        if col not in df.columns:
+            print(f"ERROR: Kolom wajib '{col}' tidak ada pada data kesimpulan.")
+            return tf.data.Dataset.from_tensor_slices(([])), None, None
+
+    # Optional: filter wilayah spesifik
+    if region_filter:
+        df = df[df['Wilayah'].astype(str).str.strip().str.lower() == str(region_filter).strip().lower()]
+        if df.empty:
+            print(f"Peringatan: Tidak ada data untuk wilayah '{region_filter}' pada CSV kesimpulan.")
+    # Sortir data per wilayah dan tahun
+    df = df.sort_values(['Wilayah', 'Tahun']).reset_index(drop=True)
+
+    # Tentukan kolom fitur: ambil semua numerik kecuali label dan tahun
+    drop_non_features = ['Wilayah', 'Tahun']
+    if 'status_panen' in df.columns:
+        drop_non_features.append('status_panen')
+    label_series = df['GagalPanen'] if (is_training and 'GagalPanen' in df.columns) else None
+
+    feature_df = df.drop(columns=drop_non_features + (['GagalPanen'] if 'GagalPanen' in df.columns else []), errors='ignore')
+
+    # Pilih hanya kolom numerik
+    numeric_cols = feature_df.select_dtypes(include=[np.number]).columns.tolist()
+    feature_df = feature_df[numeric_cols]
+
+    # Fit/transform scaler
+    if is_training:
+        scaler = MinMaxScaler(feature_range=(0, 1))
+        scaled_all = scaler.fit_transform(feature_df)
+    else:
+        # Saat prediksi, scaler wajib diberikan dari luar oleh pemanggil (train menyimpan & load)
+        # Untuk kompatibilitas, jika tidak ada scaler maka gagal dengan jelas
+        if scaler is None:
+            raise ValueError("Scaler harus disediakan saat is_training=False")
+        scaled_all = scaler.transform(feature_df)
+
+    # Sisipkan kembali untuk mempermudah slicing per wilayah
+    df_scaled = pd.DataFrame(scaled_all, columns=numeric_cols)
+    df_scaled['Wilayah'] = df['Wilayah'].values
+    df_scaled['Tahun'] = df['Tahun'].values
+    if label_series is not None:
+        df_scaled['GagalPanen'] = label_series.values
+
+    # Tentukan panjang sekuens
+    if not is_training and desired_seq_len is not None and desired_seq_len > 1:
+        seq_len = int(desired_seq_len)
+    else:
+        # Hitung panjang minimal deret per wilayah untuk menentukan sequence_length yang aman
+        min_len = df_scaled.groupby('Wilayah').size().min()
+        seq_len = min(config.SEQUENCE_LENGTH, max(2, int(min_len) - 1))  # butuh minimal 2 titik agar ada target
+    if seq_len < 2:
+        print("ERROR: Data per wilayah terlalu pendek untuk membentuk sekuens.")
+        return tf.data.Dataset.from_tensor_slices(([])), None, None
+
+    print(f"Membuat sekuens tahunan per wilayah dengan panjang {seq_len}...")
+
+    # Bangun dataset per wilayah lalu gabungkan
+    dataset_all = None
+    for wilayah, g in df_scaled.groupby('Wilayah'):
+        g = g.sort_values('Tahun').reset_index(drop=True)
+        X_g = g[numeric_cols].values
+        y_g = g['GagalPanen'].values if (is_training and 'GagalPanen' in g.columns) else None
+
+        # Lewati wilayah yang terlalu pendek
+        if len(X_g) <= seq_len:
+            continue
+
+        ds = timeseries_dataset_from_array(
+            data=X_g,
+            targets=y_g if is_training else None,
+            sequence_length=seq_len,
+            sequence_stride=1,
+            batch_size=(config.BATCH_SIZE if is_training else 1),
+            shuffle=is_training
+        )
+
+        if dataset_all is None:
+            dataset_all = ds
+        else:
+            dataset_all = dataset_all.concatenate(ds)
+
+    if dataset_all is None:
+        print("ERROR: Tidak ada wilayah yang memiliki panjang deret memadai untuk sekuens.")
+        return tf.data.Dataset.from_tensor_slices(([])), None, None
+
+    return dataset_all, scaler, (label_series.values if is_training and label_series is not None else None)

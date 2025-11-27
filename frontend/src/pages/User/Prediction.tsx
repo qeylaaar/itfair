@@ -67,7 +67,7 @@ const PredictionPage: React.FC = () => {
   useEffect(() => {
     const fetchRegions = async () => {
       try {
-        const resp = await fetch('http://localhost:4000/api/ml/regions');
+        const resp = await fetch('/api/ml/regions');
 
         if (!resp.ok) {
           return;
@@ -150,7 +150,7 @@ const PredictionPage: React.FC = () => {
         requestBody.planting_month = plantingMonth;
       }
 
-      const resp = await fetch('http://localhost:4000/api/ml/predict', {
+      const resp = await fetch('/api/ml/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

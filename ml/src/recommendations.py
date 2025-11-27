@@ -325,6 +325,12 @@ def get_weather_forecast(df_weather: pd.DataFrame, months: int = 3) -> dict:
     Returns:
         dict: Prediksi cuaca per bulan
     """
+    print(f"get_weather_forecast called. df_weather empty: {df_weather.empty}")
+    print(f"DATE_COLUMN in df_weather.columns: {config.DATE_COLUMN in df_weather.columns}")
+    if not df_weather.empty:
+        print(f"df_weather columns: {df_weather.columns.tolist()}")
+        print(f"df_weather shape: {df_weather.shape}")
+    
     if df_weather.empty or config.DATE_COLUMN not in df_weather.columns:
         return {
             "forecast": [],

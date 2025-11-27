@@ -39,7 +39,7 @@ const HeroSection = ({ className = '' }) => {
             {/* CTA Buttons */}
             <div className="mt-9 flex sm:flex-row flex-col gap-3 relative z-30 items-center justify-center">
               <a 
-                href="#prediksi" 
+                href="/prediction" 
                 className="bg-green-600 transition h-12 inline-flex items-center justify-center hover:bg-green-700 px-6 py-3 rounded-full text-white text-sm font-medium shadow-lg shadow-green-500/30"
               >
                 Mulai Prediksi

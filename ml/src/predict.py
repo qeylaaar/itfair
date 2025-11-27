@@ -83,117 +83,48 @@ def predict_harvest_failure(region_name: str, start_date: str = None, use_csv: b
     
     # Muat data prediksi
     if use_csv:
-        # Untuk development: filter dari CSV
-        df_harvest, df_weather = dp.load_data_from_csv()
+        # Gunakan dataset kesimpulan yang sudah teragregasi per tahun
+        desired_seq_len = int(model_config.get('sequence_length', config.SEQUENCE_LENGTH))
+        dataset, _, _ = dp.load_kesimpulan_sequences(
+            is_training=False,
+            scaler=scaler,
+            region_filter=region_name,
+            desired_seq_len=desired_seq_len
+        )
         
-        # Normalisasi nama wilayah untuk matching yang lebih fleksibel
-        # Hapus "Kab.", "Kota", dll untuk matching
-        def normalize_region_name(name):
-            if pd.isna(name):
-                return ""
-            name = str(name).strip()
-            # Hapus prefix umum (dengan spasi setelahnya)
-            prefixes = ["Kab. ", "Kabupaten ", "Kota ", "Kotamadya "]
-            for prefix in prefixes:
-                if name.startswith(prefix):
-                    name = name[len(prefix):].strip()
-            # Juga coba tanpa spasi
-            prefixes_no_space = ["Kab.", "Kabupaten", "Kota", "Kotamadya"]
-            for prefix in prefixes_no_space:
-                if name.startswith(prefix) and len(name) > len(prefix):
-                    name = name[len(prefix):].strip()
-            return name
+        # Muat data cuaca dari file CSV untuk kebutuhan ringkasan web/rekomendasi
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(current_dir)  # ml/
+        weather_csv_path = os.path.join(project_root, 'data', 'sample_data_cuaca.csv')
         
-        # Normalisasi nama wilayah untuk data cuaca dan panen
-        df_weather_normalized = df_weather.copy()
-        df_weather_normalized['_normalized_region'] = df_weather[config.REGION_COLUMN].apply(normalize_region_name)
-        df_harvest_normalized = df_harvest.copy()
-        df_harvest_normalized['_normalized_region'] = df_harvest[config.REGION_COLUMN].apply(normalize_region_name)
-        region_normalized = normalize_region_name(region_name)
-        
-        # Coba exact match dulu
-        weather_mask = df_weather[config.REGION_COLUMN] == region_name
-        # Jika tidak ada, coba dengan normalized name
-        if not weather_mask.any():
-            weather_mask = df_weather_normalized['_normalized_region'] == region_normalized
-        # Jika masih tidak ada, coba contains (region_name di dalam cuaca region)
-        if not weather_mask.any():
-            weather_mask = df_weather[config.REGION_COLUMN].str.contains(region_name, case=False, na=False)
-        # Jika masih tidak ada, coba reverse contains (cuaca region di dalam region_name)
-        if not weather_mask.any():
-            weather_mask = df_weather_normalized['_normalized_region'].str.contains(region_normalized, case=False, na=False)
-        # Jika masih tidak ada, coba reverse - apakah region_name mengandung normalized cuaca region
-        if not weather_mask.any():
-            # Cek apakah ada normalized cuaca region yang ada di region_name
-            reverse_mask = pd.Series([False] * len(df_weather_normalized), index=df_weather_normalized.index)
-            for idx, norm_cuaca in enumerate(df_weather_normalized['_normalized_region']):
-                if region_normalized and norm_cuaca and (region_normalized in norm_cuaca or norm_cuaca in region_normalized):
-                    reverse_mask.iloc[idx] = True
-            if reverse_mask.any():
-                weather_mask = reverse_mask
-        
-        # Konversi kolom tanggal dan ambil semua cuaca untuk wilayah tsb sebagai basis
-        df_weather[config.DATE_COLUMN] = pd.to_datetime(df_weather[config.DATE_COLUMN])
-        base_weather = df_weather[weather_mask]
-        
-        # Filter data cuaca hanya dari 10 tahun terakhir
-        base_weather = base_weather.copy()  # Buat copy untuk menghindari warning
-        base_weather['Tahun'] = base_weather[config.DATE_COLUMN].dt.year
-        base_weather = base_weather[base_weather['Tahun'] >= min_year].copy()
-        base_weather = base_weather.drop(columns=['Tahun'])
-        print(f"Data cuaca setelah filter 10 tahun terakhir: {len(base_weather)} baris")
-
-        if prediction_period:
-            # Jika ada bulan penanaman, ambil data historis dari bulan yang sama di tahun-tahun sebelumnya
-            # untuk periode 3 bulan (bulan penanaman + 2 bulan berikutnya)
-            planting_month = prediction_period['planting_month']
+        if os.path.exists(weather_csv_path):
+            df_weather = pd.read_csv(weather_csv_path, sep=';')  # Gunakan separator titik koma
+            print(f"Data cuaca loaded: {len(df_weather)} baris")
+            print(f"Kolom: {df_weather.columns.tolist()}")
+            # Filter berdasarkan wilayah dan tahun terakhir
+            if config.REGION_COLUMN in df_weather.columns:
+                before_filter = len(df_weather)
+                # Normalisasi nama wilayah: hilangkan spasi dan bandingkan substring
+                region_normalized = region_name.replace(' ', '').lower()
+                df_weather['region_normalized'] = df_weather[config.REGION_COLUMN].str.replace(' ', '').str.lower()
+                df_weather = df_weather[df_weather['region_normalized'].str.contains(region_normalized, na=False)]
+                print(f"Filter wilayah '{region_name}': {before_filter} -> {len(df_weather)} baris")
+                df_weather = df_weather.drop(columns=['region_normalized'], errors='ignore')
             
-            # Ambil data dari bulan penanaman dan 2 bulan berikutnya untuk semua tahun
-            # Misalnya jika penanaman di bulan 10, ambil data Oktober, November, Desember dari semua tahun
-            month_range = []
-            for i in range(3):  # 3 bulan ke depan
-                month_num = ((planting_month - 1 + i) % 12) + 1
-                month_range.append(month_num)
-            
-            print(f"Mengambil data historis untuk bulan: {month_range}")
-            
-            # Filter data cuaca berdasarkan bulan (dari semua tahun)
-            base_weather['Bulan'] = base_weather[config.DATE_COLUMN].dt.month
-            df_weather = base_weather[base_weather['Bulan'].isin(month_range)].copy()
-            df_weather = df_weather.drop(columns=['Bulan'])
-            
-            # Urutkan berdasarkan tanggal untuk konsistensi
-            df_weather = df_weather.sort_values(by=config.DATE_COLUMN).reset_index(drop=True)
-            
-            print(f"Data cuaca historis untuk periode penanaman: {len(df_weather)} baris")
-            
-        elif start_date and not base_weather.empty:
-            # Filter berdasarkan tanggal mulai
-            filtered_weather = base_weather[base_weather[config.DATE_COLUMN] >= start_date]
-            # Jika setelah filter tanggal data kosong, fallback ke seluruh histori wilayah tsb
-            df_weather = filtered_weather if not filtered_weather.empty else base_weather
+            # Filter untuk 10 tahun terakhir
+            if config.DATE_COLUMN in df_weather.columns:
+                df_weather[config.DATE_COLUMN] = pd.to_datetime(df_weather[config.DATE_COLUMN], errors='coerce')
+                df_weather['Tahun'] = df_weather[config.DATE_COLUMN].dt.year
+                before_filter = len(df_weather)
+                df_weather = df_weather[df_weather['Tahun'] >= min_year].copy()
+                print(f"Filter tahun >= {min_year}: {before_filter} -> {len(df_weather)} baris")
+                df_weather = df_weather.drop(columns=['Tahun'], errors='ignore')
         else:
-            # Tanpa start_date atau tidak ada data sama sekali untuk wilayah
-            df_weather = base_weather
-        
-        # Filter data panen berdasarkan nama wilayah yang sudah dinormalisasi
-        harvest_mask = df_harvest_normalized['_normalized_region'] == region_normalized
-        df_harvest = df_harvest[harvest_mask]
-        
-        # Filter data panen hanya dari 10 tahun terakhir
-        # Cek kolom tahun di data panen
-        if 'Tahun' in df_harvest.columns:
-            before_count = len(df_harvest)
-            df_harvest = df_harvest[df_harvest['Tahun'] >= min_year].copy()
-            print(f"Data panen setelah filter 10 tahun terakhir: {before_count} -> {len(df_harvest)} baris")
-        elif config.DATE_COLUMN in df_harvest.columns:
-            # Jika tidak ada kolom Tahun, coba ekstrak dari kolom tanggal
-            df_harvest[config.DATE_COLUMN] = pd.to_datetime(df_harvest[config.DATE_COLUMN], errors='coerce')
-            df_harvest['Tahun'] = df_harvest[config.DATE_COLUMN].dt.year
-            before_count = len(df_harvest)
-            df_harvest = df_harvest[df_harvest['Tahun'] >= min_year].copy()
-            df_harvest = df_harvest.drop(columns=['Tahun'])
-            print(f"Data panen setelah filter 10 tahun terakhir: {before_count} -> {len(df_harvest)} baris")
+            print(f"File cuaca tidak ditemukan: {weather_csv_path}")
+            df_weather = pd.DataFrame()
+            
+        # Untuk data panen, gunakan DataFrame kosong (karena kesimpulan tidak memuat data harian)
+        df_harvest = pd.DataFrame()
     
     else:
         # Untuk production: ambil dari Supabase
@@ -228,11 +159,12 @@ def predict_harvest_failure(region_name: str, start_date: str = None, use_csv: b
                 df_harvest = df_harvest.drop(columns=['Tahun'])
                 print(f"Data panen Supabase setelah filter 10 tahun: {before_count} -> {len(df_harvest)} baris")
     
-    if df_harvest.empty or df_weather.empty:
-        return {
-            'error': f'Data tidak ditemukan untuk wilayah {region_name}. Panen: {len(df_harvest)} baris, Cuaca: {len(df_weather)} baris',
-            'region': region_name
-        }
+    if not use_csv:
+        if df_harvest.empty or df_weather.empty:
+            return {
+                'error': f'Data tidak ditemukan untuk wilayah {region_name}. Panen: {len(df_harvest)} baris, Cuaca: {len(df_weather)} baris',
+                'region': region_name
+            }
     
     # Filter ulang data cuaca untuk memastikan hanya 10 tahun terakhir
     if config.DATE_COLUMN in df_weather.columns:
@@ -299,14 +231,15 @@ def predict_harvest_failure(region_name: str, start_date: str = None, use_csv: b
         unique_regions_weather = df_weather[config.REGION_COLUMN].unique()
         print(f"Wilayah unik di data cuaca setelah filter: {unique_regions_weather}")
     
-    # Preprocess data
-    print("Memproses data...")
-    dataset, _, _ = dp.preprocess_features(
-        df_harvest,
-        df_weather,
-        scaler=scaler,
-        is_training=False
-    )
+    if not use_csv:
+        # Preprocess data (jalur lama menggunakan panen + cuaca harian)
+        print("Memproses data...")
+        dataset, _, _ = dp.preprocess_features(
+            df_harvest,
+            df_weather,
+            scaler=scaler,
+            is_training=False
+        )
 
     # Jika setelah preprocessing tidak ada sampel (misalnya karena windowing / filter),
     # jangan lanjut ke scaler/model agar tidak error "Found array with 0 sample(s)".
@@ -481,10 +414,45 @@ def _get_weather_period_label(df_weather: pd.DataFrame) -> str:
 
 def _build_weather_stats(df_weather: pd.DataFrame) -> list:
     stats = []
+    
+    if df_weather.empty:
+        return ["Suhu Rata-rata: Data tidak tersedia", "Kelembapan: Data tidak tersedia", 
+                "Curah Hujan: Data tidak tersedia", "Angin: Data tidak tersedia"]
+    
+    # Coba cari kolom numerik (suhu, kelembapan, dll)
+    has_numeric = False
     stats.append(_format_numeric_metric(df_weather, ["suhu", "temperature"], "Suhu Rata-rata", "°C"))
+    if "Data tidak tersedia" not in stats[-1]:
+        has_numeric = True
+    
     stats.append(_format_numeric_metric(df_weather, ["lembap", "humidity"], "Kelembapan", "%"))
+    if "Data tidak tersedia" not in stats[-1]:
+        has_numeric = True
+    
     stats.append(_format_numeric_metric(df_weather, ["hujan", "precip"], "Curah Hujan", "mm"))
+    if "Data tidak tersedia" not in stats[-1]:
+        has_numeric = True
+    
     stats.append(_format_numeric_metric(df_weather, ["angin", "wind"], "Angin", " km/jam"))
+    if "Data tidak tersedia" not in stats[-1]:
+        has_numeric = True
+    
+    # Jika tidak ada data numerik, tampilkan statistik kejadian ekstrem
+    if not has_numeric and config.WEATHER_EVENT_COLUMN in df_weather.columns:
+        event_counts = df_weather[config.WEATHER_EVENT_COLUMN].value_counts()
+        total_events = len(df_weather)
+        unique_dates = df_weather[config.DATE_COLUMN].nunique() if config.DATE_COLUMN in df_weather.columns else 0
+        
+        stats = [
+            f"Total Kejadian Ekstrem: {total_events} kali",
+            f"Jumlah Hari Terjadi: {unique_dates} hari",
+            f"Jenis Kejadian Terbanyak: {event_counts.index[0] if len(event_counts) > 0 else 'N/A'} ({event_counts.iloc[0] if len(event_counts) > 0 else 0} kali)"
+        ]
+        
+        if config.WEATHER_IMPACT_COLUMN in df_weather.columns:
+            impact_counts = df_weather[config.WEATHER_IMPACT_COLUMN].value_counts()
+            stats.append(f"Dampak Terbanyak: {impact_counts.index[0] if len(impact_counts) > 0 else 'N/A'} ({impact_counts.iloc[0] if len(impact_counts) > 0 else 0} kali)")
+    
     return stats
 
 def _format_numeric_metric(df: pd.DataFrame, keywords: list, label: str, unit: str) -> str:

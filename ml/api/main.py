@@ -130,69 +130,34 @@ async def predict_batch(regions: list[str], use_csv: bool = True):
 @app.get("/regions")
 async def get_available_regions():
     """
-    Mendapatkan daftar wilayah yang tersedia dalam data.
+    Mendapatkan daftar wilayah dari data_kesimpulan_processed.csv.
     """
     try:
-        # Baca langsung data kabupaten/kota dari Excel di folder data
-        # __file__ adalah ml/api/main.py, jadi naik 2 level ke root ml/
         current_file = os.path.abspath(__file__)
         base_dir = os.path.dirname(os.path.dirname(current_file))  # root ml/
-        panen_path = os.path.join(base_dir, "data", "sample_data_panen.xlsx")
-        
-        # Pastikan file exists
-        if not os.path.exists(panen_path):
-            raise FileNotFoundError(f"File data tidak ditemukan: {panen_path}")
+        csv_path = os.path.join(base_dir, "data", "data_kesimpulan_processed.csv")
+        if not os.path.exists(csv_path):
+            raise FileNotFoundError(f"File data tidak ditemukan: {csv_path}")
 
-        df_harvest = pd.read_excel(panen_path)
-
-        # Pastikan kolom yang dibutuhkan ada
-        prov_col = None
-        for col in df_harvest.columns:
-            if str(col).lower().strip() in ["provinsi", "province"]:
-                prov_col = col
+        df = pd.read_csv(csv_path)
+        col = None
+        # Cari kolom kabupaten_kota
+        for c in df.columns:
+            if str(c).strip().lower() == "kabupaten_kota" or "kabupaten" in str(c).lower() or "kota" in str(c).lower():
+                col = c
                 break
+        if col is None:
+            raise ValueError("Kolom 'kabupaten_kota' tidak ditemukan pada CSV kesimpulan")
 
-        kab_col = None
-        for col in df_harvest.columns:
-            if "kab" in str(col).lower() or "kota" in str(col).lower():
-                kab_col = col
-                break
-
-        if kab_col is None:
-            raise ValueError("Kolom kabupaten/kota tidak ditemukan dalam file Excel panen")
-
-        # Filter hanya Jawa Barat jika kolom provinsi tersedia
-        if prov_col is not None:
-            df_harvest = df_harvest[df_harvest[prov_col].astype(str).str.contains("Jawa Barat", case=False, na=False)]
-
-        regions_series = df_harvest[kab_col].astype(str).dropna()
+        regions_series = df[col].astype(str).dropna()
         regions = sorted(regions_series.unique().tolist(), key=lambda x: x.lower())
-        return {
-            "regions": regions,
-            "total": len(regions)
-        }
+        return {"regions": regions, "total": len(regions)}
     except FileNotFoundError as e:
-        raise HTTPException(
-            status_code=404,
-            detail=f"File data tidak ditemukan: {str(e)}"
-        )
-    except ImportError as e:
-        if 'openpyxl' in str(e).lower():
-            raise HTTPException(
-                status_code=500,
-                detail="Modul openpyxl tidak ditemukan. Install dengan: pip install openpyxl"
-            )
-        raise HTTPException(
-            status_code=500,
-            detail=f"Error import: {str(e)}"
-        )
+        raise HTTPException(status_code=404, detail=f"File data tidak ditemukan: {str(e)}")
     except Exception as e:
         import traceback
         error_detail = f"Error saat mengambil daftar wilayah: {str(e)}\nTraceback: {traceback.format_exc()}"
-        raise HTTPException(
-            status_code=500,
-            detail=error_detail
-        )
+        raise HTTPException(status_code=500, detail=error_detail)
 
 # Serve static files
 static_dir = os.path.join(os.path.dirname(__file__), 'static')
