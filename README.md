@@ -102,7 +102,11 @@ python ml\src\train.py
 
 #### Terminal 2: Jalankan API Backend
 ```cmd
-cd c:\laragon\www\itfair\ml
+cd ke folder backend
+npm install
+set PORT=4000 && node index.js
+
+buka terminal baru dan jalankan perintah berikut
 uvicorn api.main:app --reload --port 8001
 ```
 **Output yang diharapkan:**
