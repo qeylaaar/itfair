@@ -44,7 +44,7 @@ const HeroSection = ({ className = '' }) => {
               >
                 Mulai Prediksi
               </a>
-              <a 
+              {/* <a 
                 href="#demo" 
                 className="rounded-full flex h-12 gap-3 items-center text-sm border bg-white border-gray-200 p-1.5 pr-6 hover:shadow-lg transition-shadow"
               >
@@ -54,7 +54,7 @@ const HeroSection = ({ className = '' }) => {
                   </svg>
                 </span>
                 Lihat Demo
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

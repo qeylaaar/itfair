@@ -35,8 +35,7 @@ const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
 
   // Daftar link di dalam dropdown "Pages" untuk mengecek state aktif
   const pageLinks = [
-    '/dashboard', '/pricing', '/blog-grid', '/blog-details',
-    '/signin', '/signup', '/forgot-password', '/privacy', '/404'
+    '/dashboard', '/pricing', '/blog-grid', '/blog-details', '/privacy', '/404'
   ];
   const isPagesActive = pageLinks.some(link => pathname === link);
 
@@ -168,13 +167,13 @@ const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
 
             </button>
 
-            {/* Desktop buttons */}
+            {/* Desktop buttons
             <NavLink to="/login" className="text-sm hidden lg:block font-medium text-gray-700 hover:text-green-600">
               Sign In
             </NavLink>
             <NavLink to="/register" className="hidden lg:inline-flex bg-green-600 transition h-12 items-center justify-center hover:bg-green-700 px-6 py-3 rounded-full text-white text-sm font-medium shadow-lg shadow-green-500/30">
               Get Started Free
-            </NavLink>
+            </NavLink> */}
           </div>
         </div>
       </div>
@@ -232,7 +231,7 @@ const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
               Prediction
             </NavLink>
 
-            {/* Mobile-only buttons */}
+            {/* Mobile-only buttons
             <div className="px-3 pt-4 space-y-3 border-t border-gray-100">
               <NavLink to="/login" className="text-sm block py-3 font-medium text-gray-500 hover:text-gray-800">
                 Login
@@ -240,7 +239,7 @@ const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
               <NavLink to="/register" className="inline-flex w-full bg-green-600 transition h-12 items-center justify-center hover:bg-green-700 px-6 py-3 rounded-full text-white text-sm font-medium shadow-lg shadow-green-500/30">
                 Get Started Free
               </NavLink>
-            </div>
+            </div> */}
           </div>
         </div>
       )}

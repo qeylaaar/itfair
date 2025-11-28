@@ -273,14 +273,14 @@ const PredictionPage: React.FC = () => {
                 key={pred.id}
                 className="relative p-6 bg-white border border-gray-200 rounded-lg shadow-md transition-all group"
               >
-                {/* BARU: Tombol Hapus */}
+                {/* BARU: Tombol Hapus
                 <button 
                   onClick={(e) => handleDeleteClick(e, pred.id)}
                   className="absolute top-4 right-4 p-1.5 rounded-full text-gray-400 hover:bg-red-100 hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
                   aria-label="Hapus prediksi"
                 >
                   <Trash2 className="w-5 h-5" />
-                </button>
+                </button> */}
                 
                 <Link
                   to={`/prediction/${pred.id}`} // Arahkan ke halaman detail
@@ -399,16 +399,6 @@ const PredictionPage: React.FC = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500"
                       required
                     />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Tentukan Lokasi Lahan
-                    </label>
-                    <p className="text-xs text-gray-500 mb-2">
-                      Klik pada peta untuk menentukan koordinat lahan Anda. Anda dapat menggeser peta.
-                    </p>
-                    <MapInputComponent />
                   </div>
                 </div>
                 <hr className='border-t border-gray-300' />

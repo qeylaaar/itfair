@@ -129,7 +129,7 @@ const Footer: React.FC = () => {
                     <NavLink to="#" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Free Zip file hosting</NavLink> */}
                   </nav>
                 </div>
-                
+{/*                 
                 <div>
                   <span className="block mb-6 text-sm text-gray-500">Account</span>
                   <nav className="flex flex-col space-y-3">
@@ -137,7 +137,7 @@ const Footer: React.FC = () => {
                     <NavLink to="/register" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Sign Up</NavLink>
                     <NavLink to="contact.html" className="text-sm font-normal text-gray-600 transition hover:text-green-600">Support</NavLink>
                   </nav>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

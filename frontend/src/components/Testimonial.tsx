@@ -24,12 +24,11 @@ export default function Testimonials() {
         <div>
           <div className="max-w-2xl mx-auto mb-12 text-center">
             <h2 className="mb-3 font-bold text-center text-gray-800 text-3xl md:text-title-lg">
-              What our users says
+              Apa kata pengguna kami
             </h2>
             <p className="max-w-xl mx-auto leading-6 text-gray-500">
-              Unlock the Potential of Innovation. Discover the Advanced AI
-              Tools Transforming Your Ideas into Reality with Unmatched
-              Precision and Intelligence.
+              Buka Potensi Inovasi. Temukan Alat AI Canggih yang Mengubah 
+              Ide Anda menjadi Realitas dengan Presisi dan Kecerdasan Tak Tertandingi.
             </p>
           </div>
 
@@ -66,9 +65,9 @@ export default function Testimonials() {
                 </div>
                 <div className="p-5 rounded-2xl bg-white/90">
                   <p className="text-base leading-6 text-gray-700">
-                    As a Senior Software Developer I found TailAdmin perfect
-                    write code that easy can be used in my projects, which
-                    some are production already.
+                    Sebagai Senior Software Developer, saya merasa TailAdmin sangat sempurna. 
+                    Kodenya mudah digunakan dalam proyek saya, bahkan beberapa sudah 
+                    masuk tahap produksi.
                   </p>
                 </div>
               </div>

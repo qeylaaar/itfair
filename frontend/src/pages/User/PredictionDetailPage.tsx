@@ -211,20 +211,6 @@ const PredictionDetailPage: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  {/* Lokasi */}
-                  <div className="flex items-start gap-3">
-                    <MapPin className="w-5 h-5 text-gray-500 mt-1" />
-                    <div>
-                      <span className="text-xs text-gray-500">Lokasi Lahan</span>
-                      <p className="text-sm font-medium text-gray-900">
-                        {prediction.location.lat.toFixed(6)}, {prediction.location.lng.toFixed(6)}
-                      </p>
-                    </div>
-                  </div>
-                  {/* Peta Statis */}
-                  <div className="pt-2">
-                     <MapDisplayComponent />
-                  </div>
                 </div>
               </div>
             </div>

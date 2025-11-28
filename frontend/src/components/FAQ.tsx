@@ -4,27 +4,22 @@ const faqs = [
   {
     id: 1,
     question: "Bagaimana akurasi prediksi gagal panen ini?",
-    answer: "Sistem kami memiliki akurasi hingga 95% berdasarkan penggunaan algoritma machine learning canggih dan data historis panen selama 10 tahun. Semakin banyak data yang Anda masukkan, semakin akurat prediksinya."
+    answer: "Sistem kami menggunakan algoritma machine learning canggih dan data historis panen selama 7 tahun."
   },
   {
     id: 2,
     question: "Apa saja faktor yang digunakan dalam prediksi?",
-    answer: "Kami menganalisis berbagai faktor termasuk kondisi cuaca, kualitas tanah, jenis bibit, pola hama dan penyakit, histori panen, serta data satelit dan sensor IoT untuk memberikan prediksi yang komprehensif."
+    answer: "Kami menganalisis berbagai faktor termasuk kondisi cuaca, luas panen, dan histori panen untuk memberikan prediksi yang komprehensif."
   },
   {
     id: 3,
     question: "Apakah saya bisa mencoba secara gratis?",
-    answer: "Ya, kami menyediakan masa trial gratis selama 30 hari dengan akses penuh ke semua fitur. Anda bisa merasakan manfaatnya sebelum memutuskan berlangganan. Tidak perlu kartu kredit untuk trial."
-  },
-  {
-    id: 4,
-    question: "Bagaimana cara memulai penggunaannya?",
-    answer: "Cukup daftar akun, masukkan informasi lahan sawah Anda (lokasi, luas, jenis tanah), pilih varietas padi yang ditanam, dan sistem akan mulai memantau dan memberikan prediksi secara otomatis."
+    answer: "Ya, kami menyediakan dengan gratis"
   },
   {
     id: 5,
     question: "Apakah cocok untuk petani skala kecil?",
-    answer: "Sangat cocok! Sistem ini dirancang untuk semua skala, dari petani kecil hingga besar. Bahkan petani kecil bisa mendapatkan manfaat besar dengan biaya yang sangat terjangkau, mulai dari Rp50.000 per bulan."
+    answer: "Sangat cocok! Sistem ini dirancang untuk semua skala, dari petani kecil hingga besar."
   }
 ];
 

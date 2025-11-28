@@ -39,7 +39,7 @@ const BenefitSection: React.FC = () => {
                     Prediksi Akurat dengan AI Canggih
                   </h3>
                   <p className="text-base text-black/80">
-                    Dapatkan prediksi gagal panen hingga 95% akurat dengan 
+                    Dapatkan prediksi gagal panen dengan 
                     algoritma machine learning terkini untuk melindungi hasil panen Anda.
                   </p>
                 </div>
@@ -113,7 +113,7 @@ const BenefitSection: React.FC = () => {
                     dengan prediksi akurat dan rekomendasi tepat waktu.
                 </p>
                   <a 
-                    href="#prediksi" 
+                    href="/prediction" 
                     className="bg-green-600 transition h-12 inline-flex items-center justify-center hover:bg-green-700 px-6 py-3 rounded-full text-white text-sm font-medium shadow-lg shadow-green-500/30"
                   >
                     Coba Sekarang
