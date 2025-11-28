@@ -9,4 +9,4 @@ cara menjalankan program diantaranya:
 4. Pada backend lakukan cd ke folder backend dan set PORT=4000 && node index.js
 5. Buka terminal baru dan lakukan cara berikutnya
 6. Pada ml cd ke folder ml
-7. Ketik "unicorn api.main:app --reload --port 8001
+7. Ketik "uvicorn api.main:app --reload --port 8001
